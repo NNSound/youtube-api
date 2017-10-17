@@ -1,9 +1,7 @@
 #從KKBOX英文TOP100取得歌單，並印出
 import requests
-#import os
 import time
 import pymysql
-#import pafy
 from bs4 import BeautifulSoup
 
 global mysongs
@@ -16,8 +14,8 @@ artists = []
 hrefs = []
 looks = []
 def search_top():
-    #url = 'https://www.kkbox.com/tw/tc/charts/western-daily-song-latest.html'  #kkbox英文榜單TOP-100
-    url = "https://www.kkbox.com/tw/tc/charts/western-monthly-song-latest.html"
+    #url = "https://www.kkbox.com/tw/tc/charts/western-monthly-song-latest.html"
+    url = "https://www.kkbox.com/tw/tc/charts/hokkien-monthly-song-latest.html"#中文月榜
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'lxml')  #取得網頁原始碼
     articles = soup.find_all('div', 'item')
@@ -41,7 +39,7 @@ def search_top():
         i += 1
 
 
-def search_youtube():
+def search_youtube():#this is the old method
     url_search_query = 'https://www.youtube.com/results?search_query='
    
     err = 0
@@ -145,12 +143,4 @@ if __name__ == "__main__":
 
     search_top()
     search_hot()
-    #search_youtube()
-    ins_db()
-    '''
-    url_find="https://www.youtube.com/results?search_query=Attention"
-    response = requests.get(url_find)
-    soup = BeautifulSoup(response.text, 'lxml')
-    div_stan=soup.find('div',"yt-lockup-content")
-    print (div_stan)
-    '''
+    #ins_db()
