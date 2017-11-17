@@ -73,7 +73,7 @@ def search_hot():
             url_find = url_look + name
             response = requests.get(url_find)
             soup = BeautifulSoup(response.text, 'lxml')
-            div_lockup = soup.find_all('div', "yt-lockup-meta")#查找所有觀看紀錄
+            div_lockup = soup.find_all('div', "yt-lockup-content")#查找所有觀看紀錄
         except:
             print ("*********soup error*********")
             err.append(name)
@@ -82,13 +82,9 @@ def search_hot():
         try:
             hot_music = 0
             for i in range(0, 3):
-                yt_lockup_metas = div_lockup[i].find_all('li')
-                if len(yt_lockup_metas)<2:# 如果是直播頻道只有人數,continue
-                    print ("not find look")
-                    continue
-                yt_lockup_meta = yt_lockup_metas[1].getText() 
-                time = yt_lockup_meta[5:len(yt_lockup_meta)]
-                times = int(time.replace(',', ''))
+                li=div_lockup[i].a.get('href')
+                myvid = pafy.new("http://www.youtube.com"+li)                
+                times = myvid.viewcount
                 arr.append(times)
             hot_music = arr.index(max(arr))
             looks.append(max(arr))
@@ -151,4 +147,4 @@ def ins_db():
 if __name__ == "__main__":
     search_top()
     search_hot()
-    ins_db()
+    #ins_db()
