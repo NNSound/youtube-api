@@ -58,7 +58,7 @@ def search_youtube():#this is the old method
             div_stan = soup.find('div', "yt-lockup-content")
             href = div_stan.a.get('href')
             url_song = 'https://www.youtube.com' + href
-            print("關鍵字:", name, "\n", url_song)
+            print("Key word:", name, "\n", url_song)
             hrefs.append(url_song)
         except:
             print("*********coultn't find url*********")
@@ -90,7 +90,7 @@ def search_hot():
             looks.append(max(arr))
         except:
             print ("*********hot_music error*********")
-            print("關鍵字:", name,)
+            print("Key word:", name,)
             err.append(name)
             continue
         try:
@@ -98,7 +98,7 @@ def search_hot():
                 'div', "yt-lockup yt-lockup-tile yt-lockup-video vve-check clearfix")
             href = div_stan[hot_music].a.get('href')
             url_song = 'https://www.youtube.com' + href
-            print("關鍵字:", name, "\n觀看次數:", max(arr), "\n","hot index:",hot_music, url_song)
+            print("Key word:", name, "\nLook:", max(arr), "\n","hot index:",hot_music, url_song)
             hrefs.append(url_song)
         except:   
             print ("*********get href error*********")
@@ -147,4 +147,4 @@ def ins_db():
 if __name__ == "__main__":
     search_top()
     search_hot()
-    #ins_db()
+    ins_db()
