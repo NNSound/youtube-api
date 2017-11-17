@@ -1,8 +1,10 @@
-#從KKBOX英文TOP100取得歌單，並印出
+#!/usr/bin/python
+#-*-coding:utf-8 -*-
 import requests
 import time
 import pymysql
 from bs4 import BeautifulSoup
+import pafy
 
 global mysongs
 global artists
@@ -14,29 +16,34 @@ artists = []
 hrefs = []
 looks = []
 def search_top():
-    #url = "https://www.kkbox.com/tw/tc/charts/western-monthly-song-latest.html"
-    url = "https://www.kkbox.com/tw/tc/charts/hokkien-monthly-song-latest.html"#中文月榜
+    url = "https://www.kkbox.com/tw/tc/charts/western-monthly-song-latest.html"
+    #url = "https://www.kkbox.com/tw/tc/charts/hokkien-monthly-song-latest.html"#中文月榜
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'lxml')  #取得網頁原始碼
     articles = soup.find_all('div', 'item')
     #=====================================
     i = 0
     for article in articles:
-        meta = article.find('a')  #取得article中的<a>標籤
-        link = meta.get('title')  #取得meta得文字;歌名
-        if '(' in link:  #去除一些不必要的字串
-            link = link[0:link.index('(')]
-        if '-' in link:  #去除一些不必要的字串
-            link = link[0:link.index('-')]
-        artist = article.find('span').getText()  #歌手
-        if '(' in artist:  #去除一些不必要的字串
-            artist = artist[0:artist.index('(')]
-        if '-' in artist:  #去除一些不必要的字串
-            artist = artist[0:artist.index('-')]
+        try:
+            meta = article.find('a')  #取得article中的<a>標籤
+            link = meta.get('title')  #取得meta得文字;歌名
+            if '(' in link:  #去除一些不必要的字串
+                link = link[0:link.index('(')]
+            if '-' in link:  #去除一些不必要的字串
+                link = link[0:link.index('-')]
+            artist = article.find('span').getText()  #歌手
+            if '(' in artist:  #去除一些不必要的字串
+                artist = artist[0:artist.index('(')]
+            if '-' in artist:  #去除一些不必要的字串
+                artist = artist[0:artist.index('-')]            
+        except:
+            print ("something rong!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            continue  # 下次試試H4 H5 裡面的text           
         mysongs.append(link)
         artists.append(artist)
         print(i, mysongs[i], "\n<Artist>", artists[i])
         i += 1
+
 
 
 def search_youtube():#this is the old method
@@ -108,11 +115,13 @@ def ins_db():
     err = []
     try:
         conn = pymysql.connect(
-            host="127.0.0.1",
-            db="music_data",
-            user="Allan",
-            passwd="",
-            charset='utf8')
+                host="myfirstdb.cmuovhawvgvz.us-west-2.rds.amazonaws.com",
+                port=3306,
+                db="test",
+                user="nn",
+                passwd="wl01994570",
+                charset='utf8' 
+                )
         cur = conn.cursor()
     except:
         err.append("db fail")
@@ -140,7 +149,6 @@ def ins_db():
 
 
 if __name__ == "__main__":
-
     search_top()
     search_hot()
-    #ins_db()
+    ins_db()
