@@ -74,32 +74,23 @@ def search_hot():
             response = requests.get(url_find)
             soup = BeautifulSoup(response.text, 'lxml')
             div_lockup = soup.find_all('div', "yt-lockup-content")#查找所有觀看紀錄
-        except:
-            print ("error: soup have some wrong")
-            err.append(name)
-            continue
-        arr = []
-        try:
+            arr = []
             hot_music = 0
             for i in range(0, 3):
                 li=div_lockup[i].a.get('href')
                 myvid = pafy.new("http://www.youtube.com"+li)
                 times = myvid.viewcount
                 arr.append(times)
-        except:
-            print ("error:can't get the viewcount")
-            print("Key word:", name,)
-            err.append(name)
-            continue
-        try:
             div_stan = soup.find_all(
                 'div', "yt-lockup yt-lockup-tile yt-lockup-video vve-check clearfix")
             href = div_stan[hot_music].a.get('href')
             url_song = 'https://www.youtube.com' + href
             print("Key word:", name, "\nLook:", max(arr), "\n","hot index:",hot_music, url_song)
-        except:   
-            print ("error:can't get url")
+        except:
+            print ("error:something wrong in search_hot")
             err.append(name)
+            looks.append("")
+            hrefs.append("")
             continue
 
         hot_music = arr.index(max(arr))
