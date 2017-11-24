@@ -37,7 +37,7 @@ def search_top():
             if '-' in artist:  #去除一些不必要的字串
                 artist = artist[0:artist.index('-')]            
         except:
-            print ("something rong!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            print ("something wrong!!!!!")
             continue  # 下次試試H4 H5 裡面的text           
         mysongs.append(link)
         artists.append(artist)
@@ -68,14 +68,14 @@ def search_youtube():#this is the old method
 def search_hot():
     url_look = 'https://www.youtube.com/results?search_query='
     err = []
-    for name in mysongs:  #直接從全域變數拿資料
+    for name in mysongs:#直接從全域變數拿資料
         try:
             url_find = url_look + name
             response = requests.get(url_find)
             soup = BeautifulSoup(response.text, 'lxml')
             div_lockup = soup.find_all('div', "yt-lockup-content")#查找所有觀看紀錄
         except:
-            print ("*********soup error*********")
+            print ("error: soup have some wrong")
             err.append(name)
             continue
         arr = []
@@ -83,13 +83,11 @@ def search_hot():
             hot_music = 0
             for i in range(0, 3):
                 li=div_lockup[i].a.get('href')
-                myvid = pafy.new("http://www.youtube.com"+li)                
+                myvid = pafy.new("http://www.youtube.com"+li)
                 times = myvid.viewcount
                 arr.append(times)
-            hot_music = arr.index(max(arr))
-            looks.append(max(arr))
         except:
-            print ("*********hot_music error*********")
+            print ("error:can't get the viewcount")
             print("Key word:", name,)
             err.append(name)
             continue
@@ -99,10 +97,15 @@ def search_hot():
             href = div_stan[hot_music].a.get('href')
             url_song = 'https://www.youtube.com' + href
             print("Key word:", name, "\nLook:", max(arr), "\n","hot index:",hot_music, url_song)
-            hrefs.append(url_song)
         except:   
-            print ("*********get href error*********")
+            print ("error:can't get url")
             err.append(name)
+            continue
+
+        hot_music = arr.index(max(arr))
+        looks.append(max(arr))
+        hrefs.append(url_song)
+
     print("error time:",len(err))
     print (err)
 
@@ -116,7 +119,7 @@ def ins_db():
                 db="test",
                 user="nn",
                 passwd="wl01994570",
-                charset='utf8' 
+                charset='utf8'
                 )
         cur = conn.cursor()
     except:
@@ -147,4 +150,4 @@ def ins_db():
 if __name__ == "__main__":
     search_top()
     search_hot()
-    ins_db()
+    #ins_db()
