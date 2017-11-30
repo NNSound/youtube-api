@@ -93,7 +93,7 @@ def search_hot():
             hrefs.append("")
             continue
 
-        hot_music = arr.index(max(arr))
+        #hot_music = arr.index(max(arr))
         looks.append(max(arr))
         hrefs.append(url_song)
 
