@@ -16,8 +16,8 @@ artists = []
 hrefs = []
 looks = []
 def search_top():
-    url = "https://www.kkbox.com/tw/tc/charts/western-monthly-song-latest.html"
-    #url = "https://www.kkbox.com/tw/tc/charts/hokkien-monthly-song-latest.html"#中文月榜
+    #url = "https://www.kkbox.com/tw/tc/charts/western-monthly-song-latest.html"
+    url = "https://www.kkbox.com/tw/tc/charts/hokkien-monthly-song-latest.html"#中文月榜
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'lxml')  #取得網頁原始碼
     articles = soup.find_all('div', 'item')
@@ -118,14 +118,14 @@ def ins_db():
     i = 0
     for line in mysongs:
         try:
-            sql = "SELECT * FROM `english_song` WHERE `url` LIKE %s"
+            sql = "SELECT * FROM `chinese_song` WHERE `url` LIKE %s"
             if cur.execute(sql,(hrefs[i])):  #有找到東西 =1
                 print("Already have this song")
                 print(mysongs[i], artists[i], hrefs[i])
             elif hrefs[i] is "":  # cur.execute(sql)=0
                 print("did not have url")
             else:  # cur.execute(sql)=0, hrefs[i] is not null
-                sql = 'INSERT INTO `english_song` (`song`, `artist`, `Look`, `origin`, `url`, `download_time`)VALUES (%s, %s,%s, %s,%s, CURRENT_TIMESTAMP);'
+                sql = 'INSERT INTO `chinese_song` (`song`, `artist`, `Look`, `origin`, `url`, `download_time`)VALUES (%s, %s,%s, %s,%s, CURRENT_TIMESTAMP);'
                 print(cur.mogrify(sql,(mysongs[i], artists[i], looks[i], "KKBOX",  hrefs[i])))                
                 cur.execute(sql,(mysongs[i], artists[i], looks[i], "KKBOX",  hrefs[i]))
                 print("INSERT success")
@@ -141,4 +141,4 @@ def ins_db():
 if __name__ == "__main__":
     search_top()
     search_hot()
-    #ins_db()
+    ins_db()
