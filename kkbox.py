@@ -7,14 +7,19 @@ import json
 from datetime import *
 import pprint
 import pafy
+import os
 
 #唯一JSON檔案，告知各種語言歌曲之 category_id 下方會GET['category']之編號
 #url = 'https://kma.kkbox.com/charts/api/v1/daily/categories?lang=tc&terr=tw&type=song'
 
 class kkbox(object):
-    mysongs = []
-    looks=[]
-    hrefs = []
+    # mysongs = []
+    # looks=[]
+    # hrefs = []
+    def __init__(self):
+        self.mysongs = []
+        self.looks = []
+        self.hrefs = []
     def daily(self,day,category_id=297):
         #華語=297,西洋=390
         cid = str(category_id)
@@ -41,14 +46,14 @@ class kkbox(object):
         cid = str(category_id)
         #https://kma.kkbox.com/charts/api/v1/weekly/categories?lang=tc&terr=tw&type=song
         #一樣由上面的網址決定，榜單只存兩周，category_id type有 新歌:newrelease ， 單曲 song
-        url = 'https://kma.kkbox.com/charts/api/v1/weekly?category=297&date='+date+'&lang=tc&limit=50&terr=tw&type=song'
+        url = 'https://kma.kkbox.com/charts/api/v1/weekly?category=390&date='+date+'&lang=tc&limit=50&terr=tw&type=song'
 
         res = requests.get(url)
         stock_dict = json.loads(res.text)
         songs = stock_dict['data']['charts']['song']
         for song in songs:
             self.mysongs.append(song['artist_name']+"+"+song['song_name'])
-            print ("Artist:",song['artist_name'])
+            #print ("Artist:",song['artist_name'])
             print ("song:",song['song_name'])
     def search_hot(self):
         url_look = 'https://www.youtube.com/results?search_query='
@@ -63,7 +68,7 @@ class kkbox(object):
                 hot_music = 0
                 for i in range(0, 3):
                     li=div_lockup[i].a.get('href')
-                    print (li)
+                    #print (li)
                     myvid = pafy.new("http://www.youtube.com"+li)
                     times = myvid.viewcount
                     arr.append(times)
@@ -72,17 +77,23 @@ class kkbox(object):
                 href = div_stan[hot_music].a.get('href')
                 url_song = 'https://www.youtube.com' + href
                 print("Key word:", name, "\nLook:", max(arr), "\n","hot index:",hot_music, url_song)
+                #下載音樂
+                video = pafy.new(url_song)
+                best = video.getbestaudio(preftype="m4a")
+                directory = "music_0218E"
+                if not os.path.exists(directory):
+                    os.makedirs(directory)
+                best.download(filepath=directory, quiet=True)
+                print("download success")
             except:
                 print ("error:something wrong in search_hot")
                 err.append(name)
                 self.looks.append("")
                 self.hrefs.append("")
                 continue
-
-        #hot_music = arr.index(max(arr))
         self.looks.append(max(arr))
         self.hrefs.append(url_song)
-
+        
 
 
     
@@ -96,7 +107,7 @@ if __name__ == '__main__':
   
     kk = kkbox()
     kk.weekly(yesterday,category_id=297)
-    #kk.search_hot()
+    kk.search_hot()
 
     
     
