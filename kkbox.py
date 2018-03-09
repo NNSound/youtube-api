@@ -13,9 +13,6 @@ import os
 #url = 'https://kma.kkbox.com/charts/api/v1/daily/categories?lang=tc&terr=tw&type=song'
 
 class kkbox(object):
-    # mysongs = []
-    # looks=[]
-    # hrefs = []
     def __init__(self):
         self.mysongs = []
         self.looks = []
@@ -26,34 +23,32 @@ class kkbox(object):
         url = 'https://kma.kkbox.com/charts/api/v1/daily?category='+cid+'&date='+day+'&lang=tc&limit=50&terr=tw&type=song'
 
         res = requests.get(url)
-        #soup = BeautifulSoup(res.text, 'html.parser')
         stock_dict = json.loads(res.text)
-        #pprint.pprint (stock_dict['data']['charts']['song'][0])
         songs = stock_dict['data']['charts']['song']
         for song in songs:
             self.mysongs.append(song['artist_name']+"+"+song['song_name'])
             print ("Artist:",song['artist_name'])
             print ("song:",song['song_name'])
-    def weekly(self,yesterday,category_id=297):#周四更新榜單
+    def weekly(self,yesterday,cid=297,t="song"):#周四更新榜單
         yesterday_weekday = int(yesterday.strftime('%w')) #昨天星期幾
         
         while yesterday_weekday !=4:
             yesterday = yesterday - timedelta(days=1)
             yesterday_weekday = int(yesterday.strftime('%w'))
             date = yesterday.strftime('20%y-%m-%d')
-        #print (date)
-        date = str(date)
-        cid = str(category_id)
-        #https://kma.kkbox.com/charts/api/v1/weekly/categories?lang=tc&terr=tw&type=song
+        self.date = str(date)
+        self.cid = str(cid) #華語=297,西洋=390
+        self.type = t  #新歌:newrelease 、 單曲 song
+        #https://kma.kkbox.com/charts/api/v1/weekly?category=297&date=2018-03-08&lang=tc&limit=50&terr=tw&type=newrelease 每周新歌榜單
         #一樣由上面的網址決定，榜單只存兩周，category_id type有 新歌:newrelease ， 單曲 song
-        url = 'https://kma.kkbox.com/charts/api/v1/weekly?category=390&date='+date+'&lang=tc&limit=50&terr=tw&type=song'
-
-        res = requests.get(url)
+        url = 'https://kma.kkbox.com/charts/api/v1/weekly?category=&date=&lang=tc&limit=50&terr=tw&type='
+        dic = {'date':self.date,'type':self.type,'category':self.cid}
+        res = requests.get(url,params=dic)
         stock_dict = json.loads(res.text)
-        songs = stock_dict['data']['charts']['song']
+        songs = stock_dict['data']['charts'][self.type]
         for song in songs:
             self.mysongs.append(song['artist_name']+"+"+song['song_name'])
-            #print ("Artist:",song['artist_name'])
+            print ("Artist:",song['artist_name'])
             print ("song:",song['song_name'])
     def search_hot(self):
         url_look = 'https://www.youtube.com/results?search_query='
@@ -93,8 +88,19 @@ class kkbox(object):
                 continue
         self.looks.append(max(arr))
         self.hrefs.append(url_song)
-        
 
+
+
+    def hitoweekly(self):
+        url = "http://www.hitoradio.com/newweb/chart_1_1.php"
+        res = requests.get(url)
+        soup = BeautifulSoup(res.text, "lxml")
+        chart_bottom = soup.find('div', 'chart_bottom')
+        ul = chart_bottom.find('ul')
+        lis = ul.find_all('li')
+        for li in lis:
+            td5 = li.find_all('td')
+            print (td5[5].get_text())
 
     
 if __name__ == '__main__':
@@ -106,9 +112,8 @@ if __name__ == '__main__':
     
   
     kk = kkbox()
-    kk.weekly(yesterday,category_id=297)
-    kk.search_hot()
-
-    
+    kk.weekly(yesterday,cid=297)
+    #kk.search_hot()
+    #kk.hitoweekly()
     
 
