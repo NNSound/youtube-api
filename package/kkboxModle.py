@@ -1,6 +1,6 @@
+# -*- coding:utf-8 -*-
 
 import sys
-# from PyQt4.QtGui import QApplication
 import requests
 from bs4 import BeautifulSoup
 import json
@@ -8,27 +8,30 @@ from datetime import *
 import pprint
 import pafy
 import os
-
+from Base import dothing
 #唯一JSON檔案，告知各種語言歌曲之 category_id 下方會GET['category']之編號
 #url = 'https://kma.kkbox.com/charts/api/v1/daily/categories?lang=tc&terr=tw&type=song'
 
-class kkbox(object):
+class kkboxModle(dothing):
     def __init__(self):
+        super(kkboxModle,self).__init__()
         self.mysongs = []
         self.looks = []
         self.hrefs = []
-    def daily(self,day,category_id=297):
+    def daily(self,day,cid=297,t="song"):
         #華語=297,西洋=390
-        cid = str(category_id)
-        url = 'https://kma.kkbox.com/charts/api/v1/daily?category='+cid+'&date='+day+'&lang=tc&limit=50&terr=tw&type=song'
-
-        res = requests.get(url)
+        self.date = str(date)
+        self.cid = str(cid) #華語=297,西洋=390
+        self.type = t  #新歌:newrelease 、 單曲 song
+        url = 'https://kma.kkbox.com/charts/api/v1/daily?category=&date=&lang=tc&limit=50&terr=tw&type='
+        dic = {'date':self.date,'type':self.type,'category':self.cid}
+        res = requests.get(url,params=dic)
         stock_dict = json.loads(res.text)
-        songs = stock_dict['data']['charts']['song']
+        songs = stock_dict['data']['charts'][self.type]
         for song in songs:
-            self.mysongs.append(song['artist_name']+"+"+song['song_name'])
-            print ("Artist:",song['artist_name'])
-            print ("song:",song['song_name'])
+            self.mysongs.append(self.strclear(song['artist_name'])+"+"+self.strclear(song['song_name']))
+            print ("Artist:",self.strclear(song['artist_name']))
+            print ("song:",self.strclear(song['song_name']))
     def weekly(self,yesterday,cid=297,t="song"):#周四更新榜單
         yesterday_weekday = int(yesterday.strftime('%w')) #昨天星期幾
         
@@ -101,23 +104,10 @@ class kkbox(object):
         for li in lis:
             td5 = li.find_all('td')
             print (td5[5].get_text())
-    def strclear(self,s):
-        if '(' in s:  #去除一些不必要的字串
-            s = s[0:link.index('(')]
-        return s
+
 
     
-if __name__ == '__main__':
+
     
 
-    yesterday = datetime.now() - timedelta(days=1)# 昨天
     
-    date = yesterday.strftime('20%y-%m-%d')
-    
-  
-    kk = kkbox()
-    kk.weekly(yesterday,cid=297)
-    #kk.search_hot()
-    #kk.hitoweekly()
-    
-
