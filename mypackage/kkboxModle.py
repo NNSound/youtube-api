@@ -10,7 +10,7 @@ import os
 from .Base import dothing
 #唯一JSON檔案，告知各種語言歌曲之 category_id 下方會GET['category']之編號
 #url = 'https://kma.kkbox.com/charts/api/v1/daily/categories?lang=tc&terr=tw&type=song'
-
+#應該在下載完成之後再放進Redis
 class kkboxModle(dothing):
     yesterday = datetime.now() - timedelta(days=1)# 昨天
     date = yesterday.strftime('20%y-%m-%d')
@@ -31,9 +31,11 @@ class kkboxModle(dothing):
         stock_dict = json.loads(res.text)
         songs = stock_dict['data']['charts'][self.type]
         for song in songs:
-            self.mysongs.append(self.strclear(song['artist_name'])+"+"+self.strclear(song['song_name']))
-            print ("Artist:",self.strclear(song['artist_name']))
-            print ("song:",self.strclear(song['song_name']))
+            A = self.strclear(song['artist_name'])
+            S = self.strclear(song['song_name'])
+            self.mysongs.append(A+"+"+S)
+            self.printissue(A,S)
+            
     def weekly(self,yesterday=None,cid=297,t="song"):#周四更新榜單
         if yesterday is None:
             yesterday = self.yesterday

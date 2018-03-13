@@ -11,5 +11,8 @@ class demo(object):
 
 if __name__ == '__main__':
     kk = kkboxModle()
-    kk.weekly()
+    #kk.weekly()
+    bb = dothing()
+    i=0
     
+    bb.deltest()
