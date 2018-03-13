@@ -12,6 +12,11 @@ class dothing(object):
         if '-' in s:  #去除一些不必要的字串
             s = s[0:s.index('-')]
         return s
+
+
+
+
+    
     def settsting(self):
         self.r.set('name', 'saneri') #创建一个键值对
     def savetesting(self):

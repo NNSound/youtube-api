@@ -13,10 +13,13 @@ import os
 #url = 'https://kma.kkbox.com/charts/api/v1/daily/categories?lang=tc&terr=tw&type=song'
 
 class kkbox(object):
+    yesterday = datetime.now() - timedelta(days=1)# 昨天
+    date = yesterday.strftime('20%y-%m-%d')
     def __init__(self):
         self.mysongs = []
         self.looks = []
         self.hrefs = []
+        
     def daily(self,day,category_id=297):
         #華語=297,西洋=390
         cid = str(category_id)
@@ -29,7 +32,7 @@ class kkbox(object):
             self.mysongs.append(song['artist_name']+"+"+song['song_name'])
             print ("Artist:",song['artist_name'])
             print ("song:",song['song_name'])
-    def weekly(self,yesterday,cid=297,t="song"):#周四更新榜單
+    def weekly(self,yesterday=yesterday,cid=297,t="song"):#周四更新榜單
         yesterday_weekday = int(yesterday.strftime('%w')) #昨天星期幾
         
         while yesterday_weekday !=4:
@@ -110,9 +113,9 @@ class kkbox(object):
 if __name__ == '__main__':
     
 
-    yesterday = datetime.now() - timedelta(days=1)# 昨天
+    #yesterday = datetime.now() - timedelta(days=1)# 昨天
     
-    date = yesterday.strftime('20%y-%m-%d')
+    #date = yesterday.strftime('20%y-%m-%d')
     
   
     kk = kkbox()

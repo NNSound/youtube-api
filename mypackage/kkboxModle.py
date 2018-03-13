@@ -5,7 +5,6 @@ import requests
 from bs4 import BeautifulSoup
 import json
 from datetime import *
-import pprint
 import pafy
 import os
 from .Base import dothing
@@ -13,6 +12,8 @@ from .Base import dothing
 #url = 'https://kma.kkbox.com/charts/api/v1/daily/categories?lang=tc&terr=tw&type=song'
 
 class kkboxModle(dothing):
+    yesterday = datetime.now() - timedelta(days=1)# 昨天
+    date = yesterday.strftime('20%y-%m-%d')
     def __init__(self):
         super(kkboxModle,self).__init__()
         self.mysongs = []
@@ -33,8 +34,10 @@ class kkboxModle(dothing):
             self.mysongs.append(self.strclear(song['artist_name'])+"+"+self.strclear(song['song_name']))
             print ("Artist:",self.strclear(song['artist_name']))
             print ("song:",self.strclear(song['song_name']))
-    def weekly(self,yesterday,cid=297,t="song"):#周四更新榜單
-        yesterday_weekday = int(yesterday.strftime('%w')) #昨天星期幾
+    def weekly(self,yesterday=None,cid=297,t="song"):#周四更新榜單
+        if yesterday is None:
+            yesterday = self.yesterday
+            yesterday_weekday = int(yesterday.strftime('%w')) #昨天星期幾
         
         while yesterday_weekday !=4:
             yesterday = yesterday - timedelta(days=1)
@@ -51,10 +54,10 @@ class kkboxModle(dothing):
         stock_dict = json.loads(res.text)
         songs = stock_dict['data']['charts'][self.type]
         for song in songs:
-            self.mysongs.append(song['artist_name']+"+"+song['song_name'])
-            print ("Artist:",song['artist_name'])
-            print ("song:",song['song_name'])
-    def search_hot(self):
+            self.mysongs.append(self.strclear(song['artist_name'])+"+"+self.strclear(song['song_name']))
+            print ("Artist:",self.strclear(song['artist_name']))
+            print ("song:",self.strclear(song['song_name']))
+    def search_hot(self):#很慢 考慮使用Youtube 替代
         url_look = 'https://www.youtube.com/results?search_query='
         err = []
         for name in self.mysongs:#直接從全域變數拿資料
