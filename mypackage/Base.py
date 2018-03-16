@@ -18,8 +18,8 @@ class dothing(object):
         self.r.sadd('songList', song) #创建一个键值对
 
     def printissue(self,Artist,song):
-        print ("Artist:",self.strclear(Artist))
-        print ("song:",self.strclear(song))
+        print ("Artist:",Artist)
+        print ("song:",song)
 
 
     

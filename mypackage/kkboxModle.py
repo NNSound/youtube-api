@@ -20,9 +20,10 @@ class kkboxModle(dothing):
         self.looks = []
         self.hrefs = []
         #考慮改用resdis做
-    def daily(self,day,cid=297,t="song"):
+    def daily(self,day=None,cid=297,t="song"):
         #華語=297,西洋=390
-        self.date = str(date)
+        if day is None:
+            self.date = str(date)
         self.cid = str(cid) #華語=297,西洋=390
         self.type = t  #新歌:newrelease 、 單曲 song
         url = 'https://kma.kkbox.com/charts/api/v1/daily?category=&date=&lang=tc&limit=50&terr=tw&type='
@@ -44,24 +45,26 @@ class kkboxModle(dothing):
         while yesterday_weekday !=4:
             yesterday = yesterday - timedelta(days=1)
             yesterday_weekday = int(yesterday.strftime('%w'))
-            date = yesterday.strftime('20%y-%m-%d')
-        self.date = str(date)
+        _date = yesterday.strftime('20%y-%m-%d')
+        self.date = str(_date)
         self.cid = str(cid) #華語=297,西洋=390
         self.type = t  #新歌:newrelease 、 單曲 song
         #https://kma.kkbox.com/charts/api/v1/weekly?category=297&date=2018-03-08&lang=tc&limit=50&terr=tw&type=newrelease 每周新歌榜單
         #一樣由上面的網址決定，榜單只存兩周，category_id type有 新歌:newrelease ， 單曲 song
-        url = 'https://kma.kkbox.com/charts/api/v1/weekly?category=&date=&lang=tc&limit=50&terr=tw&type='
+        url = 'https://kma.kkbox.com/charts/api/v1/weekly?category=&date=&lang=tc&limit=10&terr=tw&type='
         dic = {'date':self.date,'type':self.type,'category':self.cid}
         res = requests.get(url,params=dic)
         stock_dict = json.loads(res.text)
         songs = stock_dict['data']['charts'][self.type]
         for song in songs:
-            self.mysongs.append(self.strclear(song['artist_name'])+"+"+self.strclear(song['song_name']))
-            print ("Artist:",self.strclear(song['artist_name']))
-            print ("song:",self.strclear(song['song_name']))
+            A = self.strclear(song['artist_name'])
+            S = self.strclear(song['song_name'])
+            self.mysongs.append(A+"-"+S)
+            self.printissue(A,S)
     def search_hot(self):#很慢 考慮使用Youtube 替代
         url_look = 'https://www.youtube.com/results?search_query='
         err = []
+        index = 0
         for name in self.mysongs:#直接從全域變數拿資料
             try:
                 url_find = url_look + name
@@ -84,11 +87,13 @@ class kkboxModle(dothing):
                 #下載音樂
                 video = pafy.new(url_song)
                 best = video.getbestaudio(preftype="m4a")
-                directory = "music_0218E"
+                directory = "test"
                 if not os.path.exists(directory):
                     os.makedirs(directory)
-                best.download(filepath=directory, quiet=True)
+                filename = directory+"/"+str(self.mysongs[index])+".m4a"
+                best.download(filepath=filename, quiet=True,meta=True)
                 print("download success")
+                index +=1
             except:
                 print ("error:something wrong in search_hot")
                 err.append(name)
@@ -110,7 +115,17 @@ class kkboxModle(dothing):
         for li in lis:
             td5 = li.find_all('td')
             print (td5[5].get_text())
-
-    
-
+            
+'''
+    def strclear(self,s=''):
+        print("new fuc")
+        if '(' in s:  #去除一些不必要的字串
+            s = s[0:s.index('(')]
+        if '-' in s:  #去除一些不必要的字串
+            s = s[0:s.index('-')]
+        return s
+    def printissue(self,Artist,song):
+        print ("Artist:",Artist)
+        print ("song:",song)    
+'''
 
