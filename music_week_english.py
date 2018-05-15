@@ -140,5 +140,5 @@ def ins_db():
 
 if __name__ == "__main__":
     search_top()
-    search_hot()
-    ins_db()
+    #search_hot()
+    #ins_db()

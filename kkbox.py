@@ -106,20 +106,20 @@ class kkbox(object):
             print (td5[5].get_text())
     def strclear(self,s):
         if '(' in s:  #去除一些不必要的字串
-            s = s[0:link.index('(')]
+            s = s[0:s.index('(')]
         return s
 
     
 if __name__ == '__main__':
     
 
-    #yesterday = datetime.now() - timedelta(days=1)# 昨天
+    yesterday = datetime.now() - timedelta(days=1)# 昨天
     
     #date = yesterday.strftime('20%y-%m-%d')
     
   
     kk = kkbox()
-    kk.weekly(yesterday,cid=297)
+    kk.weekly(yesterday,cid=297,t='newrelease')
     #kk.search_hot()
     #kk.hitoweekly()
     
