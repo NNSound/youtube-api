@@ -50,7 +50,7 @@ class kkbox(object):
         stock_dict = json.loads(res.text)
         songs = stock_dict['data']['charts'][self.type]
         for song in songs:
-            self.mysongs.append(song['artist_name']+"+"+song['song_name'])
+            self.mysongs.append(self.strclear(song['artist_name'])+"+"+self.strclear(song['song_name']))
             print ("Artist:",song['artist_name'])
             print ("song:",song['song_name'])
     def search_hot(self):
@@ -78,10 +78,10 @@ class kkbox(object):
                 #下載音樂
                 video = pafy.new(url_song)
                 best = video.getbestaudio(preftype="m4a")
-                directory = "music_0218E"
+                directory = "music_0512/"
                 if not os.path.exists(directory):
                     os.makedirs(directory)
-                best.download(filepath=directory, quiet=True)
+                best.download(filepath=directory+name+".m4a",meta=True, quiet=True)
                 print("download success")
             except:
                 print ("error:something wrong in search_hot")
@@ -107,6 +107,8 @@ class kkbox(object):
     def strclear(self,s):
         if '(' in s:  #去除一些不必要的字串
             s = s[0:s.index('(')]
+        if '<' in s:  #去除一些不必要的字串
+            s = s[0:s.index('<')]
         return s
 
     
@@ -120,7 +122,7 @@ if __name__ == '__main__':
   
     kk = kkbox()
     kk.weekly(yesterday,cid=297,t='newrelease')
-    #kk.search_hot()
+    kk.search_hot()
     #kk.hitoweekly()
     
 
