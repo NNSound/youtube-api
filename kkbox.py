@@ -94,6 +94,14 @@ class kkbox(object):
 
 
 
+
+    def strclear(self,s):
+        if '(' in s:  #去除一些不必要的字串
+            s = s[0:s.index('(')]
+        if '<' in s:  #去除一些不必要的字串
+            s = s[0:s.index('<')]
+        return s
+class hito(object):
     def hitoweekly(self):
         url = "http://www.hitoradio.com/newweb/chart_1_1.php"
         res = requests.get(url)
@@ -104,13 +112,15 @@ class kkbox(object):
         for li in lis:
             td5 = li.find_all('td')
             print (td5[5].get_text())
-    def strclear(self,s):
-        if '(' in s:  #去除一些不必要的字串
-            s = s[0:s.index('(')]
-        if '<' in s:  #去除一些不必要的字串
-            s = s[0:s.index('<')]
-        return s
+    def topyear(self):
+        url = "http://www.hitoradio.com/newweb/chart_2.php?ch_year=2017&pageNum_rsList=0"
+        res = requests.get(url)
+        soup = BeautifulSoup(res.text, "lxml")
+        content  = soup.find('div',id="content")
+        
+        table = content.find('tbody')
 
+        print (table)
     
 if __name__ == '__main__':
     
@@ -120,9 +130,12 @@ if __name__ == '__main__':
     #date = yesterday.strftime('20%y-%m-%d')
     
   
-    kk = kkbox()
-    kk.weekly(yesterday,cid=297,t='newrelease')
-    kk.search_hot()
-    #kk.hitoweekly()
+    # kk = kkbox()
+    # kk.weekly(yesterday,cid=297,t='newrelease')
+    # kk.search_hot()
+    hh =hito()
+    hh.topyear()
     
 
+#age
+#區域成長法
