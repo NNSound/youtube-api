@@ -1,39 +1,60 @@
 # -*- coding:utf-8 -*-
-import redis
+import requests
+from bs4 import BeautifulSoup
+import pafy
+import os
 
-class dothing(object):
-    def __init__(self):
-        self.r = redis.Redis(host='127.0.0.1', port=6379)
-
-        #self.r.set('name', 'saneri') #创建一个键值对
-        #print (self.r.get('name'))
-    def strclear(self,s=''):
-        if '(' in s:  #去除一些不必要的字串
-            s = s[0:s.index('(')]
-        if '-' in s:  #去除一些不必要的字串
-            s = s[0:s.index('-')]
-        return s
-    def addsong(self,song):
-        self.strclear("aaa")
-        self.r.sadd('songList', song) #创建一个键值对
-
-    def printissue(self,Artist,song):
-        print ("Artist:",Artist)
-        print ("song:",song)
+looks =[]
+hrefs =[]
+def strclear(s=''):
+    if '(' in s:  #去除一些不必要的字串
+        s = s[0:s.index('(')]
+    if '-' in s:  #去除一些不必要的字串
+        s = s[0:s.index('-')]
+    return s
 
 
-    
-    
+def printissue(Artist,song):
+    print ("Artist:",Artist)
+    print ("song:",song)
+def search_hot(songs):
+    url_look = 'https://www.youtube.com/results?search_query='
+    err = []
+    for name in songs:#直接從全域變數拿資料
+        try:
+            url_find = url_look + name
+            response = requests.get(url_find)
+            soup = BeautifulSoup(response.text, 'lxml')
+            div_lockup = soup.find_all('div', "yt-lockup-content")#查找所有觀看紀錄
+            arr = []
+            hot_music = 0
+            for i in range(0, 3):
+                li=div_lockup[i].a.get('href')
+                #print (li)
+                myvid = pafy.new("http://www.youtube.com"+li)
+                times = myvid.viewcount
+                arr.append(times)
+            div_stan = soup.find_all(
+                'div', "yt-lockup yt-lockup-tile yt-lockup-video vve-check clearfix")
+            href = div_stan[hot_music].a.get('href')
+            url_song = 'https://www.youtube.com' + href
+            print("Key word:", name, "\nLook:", max(arr), "\n","hot index:",hot_music, url_song)
+            #下載音樂
+            video = pafy.new(url_song)
+            best = video.getbestaudio(preftype="m4a")
+            directory = "2017/"
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+            best.download(filepath=directory+name+".m4a",meta=True, quiet=True)
+            print("download success")
+        except:
+            print ("error:something wrong in search_hot")
+            err.append(name)
+            looks.append("")
+            hrefs.append("")
+            continue
+    looks.append(max(arr))
+    hrefs.append(url_song)
 
-    def settsting(self):
-        self.r.set('name', 'saneri') #创建一个键值对
-    def savetesting(self):
-        self.r.save()
-    def loadtesting(self):
-        self.r.get('songList')
-        print (self.r.get('name'))
-    def deltest(self):
-        self.r.flushdb()
-        
-    def ggg(self):
-        print (self.r.smembers('songList'))
+
+

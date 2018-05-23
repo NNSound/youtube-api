@@ -8,6 +8,8 @@ from datetime import *
 import pprint
 import pafy
 import os
+from mypackage import Base
+
 
 #唯一JSON檔案，告知各種語言歌曲之 category_id 下方會GET['category']之編號
 #url = 'https://kma.kkbox.com/charts/api/v1/daily/categories?lang=tc&terr=tw&type=song'
@@ -16,6 +18,7 @@ class kkbox(object):
     yesterday = datetime.now() - timedelta(days=1)# 昨天
     date = yesterday.strftime('20%y-%m-%d')
     def __init__(self):
+        
         self.mysongs = []
         self.looks = []
         self.hrefs = []
@@ -102,6 +105,11 @@ class kkbox(object):
             s = s[0:s.index('<')]
         return s
 class hito(object):
+    
+    def __init__(self):
+        self.mysongs = []
+        self.looks = []
+        self.hrefs = []
     def hitoweekly(self):
         url = "http://www.hitoradio.com/newweb/chart_1_1.php"
         res = requests.get(url)
@@ -119,8 +127,14 @@ class hito(object):
         content  = soup.find('div',id="content")
         
         table = content.find('tbody')
-
-        print (table)
+        songs = table.find_all('tr')
+        for song in songs:
+            line = song.find_all('td')
+            print ("Artist:",line[3].get_text())
+            print ("song:",line[1].get_text())            
+            self.mysongs.append(line[3].get_text()+"+"+line[1].get_text())
+        Base.search_hot(self.mysongs)
+        #print (song[0])
     
 if __name__ == '__main__':
     
