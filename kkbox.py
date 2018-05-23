@@ -121,18 +121,20 @@ class hito(object):
             td5 = li.find_all('td')
             print (td5[5].get_text())
     def topyear(self):
-        url = "http://www.hitoradio.com/newweb/chart_2.php?ch_year=2017&pageNum_rsList=0"
-        res = requests.get(url)
-        soup = BeautifulSoup(res.text, "lxml")
-        content  = soup.find('div',id="content")
-        
-        table = content.find('tbody')
-        songs = table.find_all('tr')
-        for song in songs:
-            line = song.find_all('td')
-            print ("Artist:",line[3].get_text())
-            print ("song:",line[1].get_text())            
-            self.mysongs.append(line[3].get_text()+"+"+line[1].get_text())
+        for i in range(0,2):
+            url = "http://www.hitoradio.com/newweb/chart_2.php?ch_year=2017&pageNum_rsList="+str(i)
+            print (url)
+            res = requests.get(url)
+            soup = BeautifulSoup(res.text, "lxml")
+            content  = soup.find('div',id="content")
+            
+            table = content.find('tbody')
+            songs = table.find_all('tr')
+            for song in songs:
+                line = song.find_all('td')
+                print ("Artist:",line[3].get_text())
+                print ("song:",line[1].get_text())            
+                self.mysongs.append(line[3].get_text()+"+"+line[1].get_text())
         Base.search_hot(self.mysongs)
         #print (song[0])
     
