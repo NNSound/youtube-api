@@ -17,7 +17,7 @@ hrefs = []
 looks = []
 def search_top():
     #url = "https://www.kkbox.com/tw/tc/charts/western-monthly-song-latest.html"
-    url = "https://www.kkbox.com/tw/tc/charts/hokkien-monthly-song-latest.html"#中文月榜
+    url = "https://www.kkbox.com/tw/tc/charts/hokkien-monthly-song-latest.html"#中文周榜
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'lxml')  #取得網頁原始碼
     articles = soup.find_all('div', 'item')

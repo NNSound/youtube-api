@@ -4,16 +4,28 @@ from bs4 import BeautifulSoup
 import pafy
 import os
 
+
+mysong =[]
 looks =[]
 hrefs =[]
+youtubeURL =[]
+def getArrMysongs():
+    return mysong
+def getArrLooks():
+    return looks
+def getArrHrefs():
+    return hrefs
+def getArrYoutubeURL():
+    return youtubeURL
+
 def strclear(s=''):
     if '(' in s:  #去除一些不必要的字串
         s = s[0:s.index('(')]
     if '-' in s:  #去除一些不必要的字串
         s = s[0:s.index('-')]
+    if '"' in s:  #去除一些不必要的字串
+        s = s[0:s.index('"')]
     return s
-
-
 def printissue(Artist,song):
     print ("Artist:",Artist)
     print ("song:",song)
@@ -39,14 +51,7 @@ def search_hot(songs):
             href = div_stan[hot_music].a.get('href')
             url_song = 'https://www.youtube.com' + href
             print("Key word:", name, "\nLook:", max(arr), "\n","hot index:",hot_music, url_song)
-            #下載音樂
-            video = pafy.new(url_song)
-            best = video.getbestaudio(preftype="m4a")
-            directory = "2017/"
-            if not os.path.exists(directory):
-                os.makedirs(directory)
-            best.download(filepath=directory+name+".m4a",meta=True, quiet=True)
-            print("download success")
+            self.download()
         except:
             print ("error:something wrong in search_hot")
             err.append(name)
@@ -57,4 +62,13 @@ def search_hot(songs):
     hrefs.append(url_song)
 
 
-
+def download():
+    #下載音樂
+    for name in getArrMysongs():
+        video = pafy.new(url_song)
+        best = video.getbestaudio(preftype="m4a")
+        directory = "2017/"
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        best.download(filepath=directory+name+".m4a",meta=True, quiet=True)
+        print("download success")

@@ -1,4 +1,4 @@
-
+# -*- coding:utf-8 -*-
 import sys
 # from PyQt4.QtGui import QApplication
 import requests
@@ -18,11 +18,13 @@ class kkbox(object):
     yesterday = datetime.now() - timedelta(days=1)# 昨天
     date = yesterday.strftime('20%y-%m-%d')
     def __init__(self):
+        self.mysongs = Base.getArrMysongs()        
+        self.looks = Base.getArrLooks()
+        self.hrefs = Base.getArrHrefs()
+        self.youtubeURL = Base.getArrYoutubeURL()
         
-        self.mysongs = []
-        self.looks = []
-        self.hrefs = []
-        
+        #print ()
+
     def daily(self,day,category_id=297):
         #華語=297,西洋=390
         cid = str(category_id)
@@ -35,9 +37,9 @@ class kkbox(object):
             self.mysongs.append(song['artist_name']+"+"+song['song_name'])
             print ("Artist:",song['artist_name'])
             print ("song:",song['song_name'])
+
     def weekly(self,yesterday=yesterday,cid=297,t="song"):#周四更新榜單
-        yesterday_weekday = int(yesterday.strftime('%w')) #昨天星期幾
-        
+        yesterday_weekday = int(yesterday.strftime('%w')) #昨天星期幾        
         while yesterday_weekday !=4:
             yesterday = yesterday - timedelta(days=1)
             yesterday_weekday = int(yesterday.strftime('%w'))
@@ -70,7 +72,7 @@ class kkbox(object):
                 for i in range(0, 3):
                     li=div_lockup[i].a.get('href')
                     #print (li)
-                    myvid = pafy.new("http://www.youtube.com"+li)
+                    myvid = pafy.new("http://www.youtube.com"+li)#效率很差
                     times = myvid.viewcount
                     arr.append(times)
                 div_stan = soup.find_all(
@@ -78,19 +80,13 @@ class kkbox(object):
                 href = div_stan[hot_music].a.get('href')
                 url_song = 'https://www.youtube.com' + href
                 print("Key word:", name, "\nLook:", max(arr), "\n","hot index:",hot_music, url_song)
-                #下載音樂
-                video = pafy.new(url_song)
-                best = video.getbestaudio(preftype="m4a")
-                directory = "music_0512/"
-                if not os.path.exists(directory):
-                    os.makedirs(directory)
-                best.download(filepath=directory+name+".m4a",meta=True, quiet=True)
-                print("download success")
+                self.youtubeURL.append(str(url_song))
+
             except:
                 print ("error:something wrong in search_hot")
                 err.append(name)
-                self.looks.append("")
-                self.hrefs.append("")
+                self.looks.append("error")
+                self.hrefs.append("error")
                 continue
         self.looks.append(max(arr))
         self.hrefs.append(url_song)
@@ -139,19 +135,16 @@ class hito(object):
         #print (song[0])
     
 if __name__ == '__main__':
-    
-
     yesterday = datetime.now() - timedelta(days=1)# 昨天
+    date = yesterday.strftime('20%y-%m-%d')
+      
+    kk = kkbox()
+    #kk.daily(date)
     
-    #date = yesterday.strftime('20%y-%m-%d')
-    
-  
-    # kk = kkbox()
-    # kk.weekly(yesterday,cid=297,t='newrelease')
-    # kk.search_hot()
-    hh =hito()
-    hh.topyear()
-    
-
+    kk.weekly(yesterday,cid=297,t='song')
+    kk.search_hot()
+    print (Base.getArrYoutubeURL())
+    #hh =hito()
+    #hh.topyear()
 #age
 #區域成長法
