@@ -29,7 +29,9 @@ def strclear(s=''):
 def printissue(Artist,song):
     print ("Artist:",Artist)
     print ("song:",song)
-def search_hot(songs):
+def search_hot(songs=None):
+    if songs is None:
+        songs = getArrMysongs()
     url_look = 'https://www.youtube.com/results?search_query='
     err = []
     for name in songs:#直接從全域變數拿資料
@@ -43,7 +45,7 @@ def search_hot(songs):
             for i in range(0, 3):
                 li=div_lockup[i].a.get('href')
                 #print (li)
-                myvid = pafy.new("http://www.youtube.com"+li)
+                myvid = pafy.new("http://www.youtube.com"+li)#效率很差
                 times = myvid.viewcount
                 arr.append(times)
             div_stan = soup.find_all(
@@ -51,7 +53,8 @@ def search_hot(songs):
             href = div_stan[hot_music].a.get('href')
             url_song = 'https://www.youtube.com' + href
             print("Key word:", name, "\nLook:", max(arr), "\n","hot index:",hot_music, url_song)
-            self.download()
+            getArrYoutubeURL().append(url_song)
+            #self.download()
         except:
             print ("error:something wrong in search_hot")
             err.append(name)
@@ -64,7 +67,7 @@ def search_hot(songs):
 
 def download():
     #下載音樂
-    for name in getArrMysongs():
+    for name in self.getArrMysongs():
         video = pafy.new(url_song)
         best = video.getbestaudio(preftype="m4a")
         directory = "2017/"

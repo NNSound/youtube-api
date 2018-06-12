@@ -49,8 +49,8 @@ class kkbox(object):
         self.type = t  #新歌:newrelease 、 單曲 song
         #https://kma.kkbox.com/charts/api/v1/weekly?category=297&date=2018-03-08&lang=tc&limit=50&terr=tw&type=newrelease 每周新歌榜單
         #一樣由上面的網址決定，榜單只存兩周，category_id type有 新歌:newrelease ， 單曲 song
-        url = 'https://kma.kkbox.com/charts/api/v1/weekly?category=&date=&lang=tc&limit=50&terr=tw&type='
-        dic = {'date':self.date,'type':self.type,'category':self.cid}
+        url = 'https://kma.kkbox.com/charts/api/v1/weekly'
+        dic = {'date':self.date,'type':self.type,'category':self.cid,'lang':'tc','limit':50,'terr':'tw'}
         res = requests.get(url,params=dic)
         stock_dict = json.loads(res.text)
         songs = stock_dict['data']['charts'][self.type]
@@ -58,38 +58,7 @@ class kkbox(object):
             self.mysongs.append(self.strclear(song['artist_name'])+"+"+self.strclear(song['song_name']))
             print ("Artist:",song['artist_name'])
             print ("song:",song['song_name'])
-    def search_hot(self):
-        url_look = 'https://www.youtube.com/results?search_query='
-        err = []
-        for name in self.mysongs:#直接從全域變數拿資料
-            try:
-                url_find = url_look + name
-                response = requests.get(url_find)
-                soup = BeautifulSoup(response.text, 'lxml')
-                div_lockup = soup.find_all('div', "yt-lockup-content")#查找所有觀看紀錄
-                arr = []
-                hot_music = 0
-                for i in range(0, 3):
-                    li=div_lockup[i].a.get('href')
-                    #print (li)
-                    myvid = pafy.new("http://www.youtube.com"+li)#效率很差
-                    times = myvid.viewcount
-                    arr.append(times)
-                div_stan = soup.find_all(
-                    'div', "yt-lockup yt-lockup-tile yt-lockup-video vve-check clearfix")
-                href = div_stan[hot_music].a.get('href')
-                url_song = 'https://www.youtube.com' + href
-                print("Key word:", name, "\nLook:", max(arr), "\n","hot index:",hot_music, url_song)
-                self.youtubeURL.append(str(url_song))
-
-            except:
-                print ("error:something wrong in search_hot")
-                err.append(name)
-                self.looks.append("error")
-                self.hrefs.append("error")
-                continue
-        self.looks.append(max(arr))
-        self.hrefs.append(url_song)
+    
 
 
 
@@ -103,9 +72,10 @@ class kkbox(object):
 class hito(object):
     
     def __init__(self):
-        self.mysongs = []
-        self.looks = []
-        self.hrefs = []
+        self.mysongs = Base.getArrMysongs()        
+        self.looks = Base.getArrLooks()
+        self.hrefs = Base.getArrHrefs()
+        self.youtubeURL = Base.getArrYoutubeURL()
     def hitoweekly(self):
         url = "http://www.hitoradio.com/newweb/chart_1_1.php"
         res = requests.get(url)
@@ -131,20 +101,20 @@ class hito(object):
                 print ("Artist:",line[3].get_text())
                 print ("song:",line[1].get_text())            
                 self.mysongs.append(line[3].get_text()+"+"+line[1].get_text())
-        Base.search_hot(self.mysongs)
+        #Base.search_hot(self.mysongs)
         #print (song[0])
     
 if __name__ == '__main__':
     yesterday = datetime.now() - timedelta(days=1)# 昨天
     date = yesterday.strftime('20%y-%m-%d')
-      
+
     kk = kkbox()
-    #kk.daily(date)
-    
+    #kk.daily(date)    
     kk.weekly(yesterday,cid=297,t='song')
-    kk.search_hot()
-    print (Base.getArrYoutubeURL())
-    #hh =hito()
-    #hh.topyear()
+    #kk.search_hot()
+    hh =hito()
+    hh.topyear()
+    Base.search_hot()
+    print(Base.getArrMysongs())
 #age
 #區域成長法
