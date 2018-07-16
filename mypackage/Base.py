@@ -65,7 +65,7 @@ def search_hot(songs=None):
     looks.append(max(arr))
     hrefs.append(url_song)
 def search_hot_v2():
-    url = 'https://www.googleapis.com/youtube/v3/search?type=video&q=于文文 體面&order=viewCount&maxResults=1'
+    url = 'https://www.googleapis.com/youtube/v3/search'
     dic = {'part':'snippet','key':'yourKEY','type':'video','q':'于文文 體面','order':'viewCount','maxResults':1}
     r = requests.get(url,params=dic)
     json_data = json.loads(r.text)
