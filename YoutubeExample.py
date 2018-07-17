@@ -15,6 +15,7 @@ videoId = json_data['items'][0]['id']['videoId']
 print (videoId)
 
 url = 'https://www.youtube.com/watch?v='+videoId
+url2 = 'https://www.youtube.com/watch?v=zOEISgh7k_g'
 
 ydl_opts = {
     'format': 'bestaudio/best',
@@ -25,4 +26,4 @@ ydl_opts = {
     }]
 }
 with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-    ydl.download([url])
+    ydl.download([url,url2])

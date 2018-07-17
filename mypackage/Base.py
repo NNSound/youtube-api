@@ -1,9 +1,11 @@
-# -*- coding:utf-8 -*-
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
 import requests
 from bs4 import BeautifulSoup
 import pafy
 import os
 import json
+import youtube_dl
 
 
 mysong =[]
@@ -64,7 +66,7 @@ def search_hot(songs=None):
             continue
     looks.append(max(arr))
     hrefs.append(url_song)
-def search_hot_v2():
+def search_hot_v2(key,q):
     url = 'https://www.googleapis.com/youtube/v3/search'
     dic = {'part':'snippet','key':'yourKEY','type':'video','q':'于文文 體面','order':'viewCount','maxResults':1}
     r = requests.get(url,params=dic)
@@ -83,3 +85,15 @@ def download():
             os.makedirs(directory)
         best.download(filepath=directory+name+".m4a",meta=True, quiet=True)
         print("download success")
+def download_v2(videoID):
+    url = 'https://www.youtube.com/watch?v='+videoID
+    ydl_opts = {
+        'format': 'bestaudio/best',
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
+        }]
+    }
+    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        ydl.download([url])
