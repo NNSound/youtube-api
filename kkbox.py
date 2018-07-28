@@ -22,22 +22,22 @@ class kkbox(object):
         self.mysongs = Base.getArrMysongs()        
         self.looks = Base.getArrLooks()
         self.hrefs = Base.getArrHrefs()
-        self.youtubeURL = Base.getArrYoutubeURL()
-        
+        self.youtubeURL = Base.getArrYoutubeURL()        
         #print ()
 
-    def daily(self,day,category_id=297):
+    def daily(self,day=date,category_id=297):
         #華語=297,西洋=390
-        cid = str(category_id)
-        url = 'https://kma.kkbox.com/charts/api/v1/daily?category='+cid+'&date='+day+'&lang=tc&limit=50&terr=tw&type=song'
-
-        res = requests.get(url)
+        # cid = str(category_id)
+        url = 'https://kma.kkbox.com/charts/api/v1/daily'
+        dic = {'date':day,'type':'song','category':category_id,'lang':'tc','limit':50,'terr':'tw'}
+        res = requests.get(url,params=dic)
         stock_dict = json.loads(res.text)
         songs = stock_dict['data']['charts']['song']
         for song in songs:
-            self.mysongs.append(song['artist_name']+"+"+song['song_name'])
-            print ("Artist:",song['artist_name'])
-            print ("song:",song['song_name'])
+            self.mysongs.append([Base.strclear(song['artist_name']),Base.strclear(song['song_name'])])
+
+        Base.printissue()
+
 
     def weekly(self,yesterday=yesterday,cid=297,t="song"):#周四更新榜單
         yesterday_weekday = int(yesterday.strftime('%w')) #昨天星期幾        
@@ -45,31 +45,23 @@ class kkbox(object):
             yesterday = yesterday - timedelta(days=1)
             yesterday_weekday = int(yesterday.strftime('%w'))
             date = yesterday.strftime('20%y-%m-%d')
-        self.date = str(date)
-        self.cid = str(cid) #華語=297,西洋=390
-        self.type = t  #新歌:newrelease 、 單曲 song
+        # self.date = str(date)
+        # self.cid = str(cid) #華語=297,西洋=390
+        # self.type = t  #新歌:newrelease 、 單曲 song
         #https://kma.kkbox.com/charts/api/v1/weekly?category=297&date=2018-03-08&lang=tc&limit=50&terr=tw&type=newrelease 每周新歌榜單
         #一樣由上面的網址決定，榜單只存兩周，category_id type有 新歌:newrelease ， 單曲 song
         url = 'https://kma.kkbox.com/charts/api/v1/weekly'
-        dic = {'date':self.date,'type':self.type,'category':self.cid,'lang':'tc','limit':50,'terr':'tw'}
+        dic = {'date':date,'type':t,'category':cid,'lang':'tc','limit':50,'terr':'tw'}
         res = requests.get(url,params=dic)
         stock_dict = json.loads(res.text)
-        songs = stock_dict['data']['charts'][self.type]
+        songs = stock_dict['data']['charts'][t]
         for song in songs:
-            self.mysongs.append(self.strclear(song['artist_name'])+"+"+self.strclear(song['song_name']))
-            print ("Artist:",song['artist_name'])
-            print ("song:",song['song_name'])
+            self.mysongs.append([Base.strclear(song['artist_name']),Base.strclear(song['song_name'])])
+            # self.mysongs[0].append()
+            # self.mysongs[1].append()
+        Base.printissue()
     
 
-
-
-
-    def strclear(self,s):
-        if '(' in s:  #去除一些不必要的字串
-            s = s[0:s.index('(')]
-        if '<' in s:  #去除一些不必要的字串
-            s = s[0:s.index('<')]
-        return s
 class hito(object):
     
     def __init__(self):
@@ -111,11 +103,11 @@ if __name__ == '__main__':
 
     kk = kkbox()
     #kk.daily(date)    
-    kk.weekly(yesterday,cid=297,t='song')
+    kk.weekly()
     #kk.search_hot()
-    hh =hito()
-    hh.topyear()
-    Base.search_hot()
-    print(Base.getArrMysongs())
+    # hh =hito()
+    # hh.topyear()
+    # Base.search_hot()
+    # print(Base.getArrMysongs())
 #age
 #區域成長法

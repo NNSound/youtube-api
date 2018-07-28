@@ -8,10 +8,12 @@ import json
 import youtube_dl
 import sys
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+#reload(sys)
+#sys.setdefaultencoding('utf-8')
 
 mysong =[]
+
+
 looks =[]
 hrefs =[]
 youtubeURL =[]
@@ -32,9 +34,10 @@ def strclear(s=''):
     if '"' in s:  #去除一些不必要的字串
         s = s[0:s.index('"')]
     return s
-def printissue(Artist,song):
-    print ("Artist:",Artist)
-    print ("song:",song)
+def printissue():
+    for row in mysong:
+        print(row[0],row[1])
+
 
 def search_hot(songs=None):
     if songs is None:
@@ -72,14 +75,14 @@ def search_hot(songs=None):
     hrefs.append(url_song)
 def search_hot_v2(key,q):
     url = 'https://www.googleapis.com/youtube/v3/search'
-    dic = {'part':'snippet','key':'yourKEY','type':'video','q':'于文文 體面','order':'viewCount','maxResults':1}
+    dic = {'part':'snippet','key':key,'type':'video','q':q,'order':'viewCount','maxResults':1}
     r = requests.get(url,params=dic)
     json_data = json.loads(r.text)
     videoId = json_data['items'][0]['id']['videoId']
     return videoId
 
 def download():
-    #下載音樂
+    #下載音樂 棄用
     for name in self.getArrMysongs():
         video = pafy.new(url_song)
         best = video.getbestaudio(preftype="m4a")
