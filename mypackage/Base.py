@@ -96,7 +96,7 @@ def download_v2(videoID,artist,name):
     url = 'https://www.youtube.com/watch?v='+videoID
     ydl_opts = {
         'format': 'bestaudio/best',
-        'outtmpl': artist+name+'.%(ext)s',
+        'outtmpl': artist+" - "+name+'.%(ext)s',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',

@@ -104,6 +104,11 @@ if __name__ == '__main__':
     kk = kkbox()
     #kk.daily(date)    
     kk.weekly()
+    key = 'AIzaSyDwUr1a8vrEezAggdn4A2KgmoNCvZyDVcc'
+    mylist = Base.getArrMysongs()
+    for row in mylist:
+        vid = Base.search_hot_v2(key,row[0]+" "+row[1])
+        Base.download_v2(vid,row[0],row[1])
     #kk.search_hot()
     # hh =hito()
     # hh.topyear()
