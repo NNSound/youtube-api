@@ -19,11 +19,7 @@ class kkbox(object):
     yesterday = datetime.now() - timedelta(days=1)# 昨天
     date = yesterday.strftime('20%y-%m-%d')
     def __init__(self):
-        self.mysongs = Base.getArrMysongs()        
-        self.looks = Base.getArrLooks()
-        self.hrefs = Base.getArrHrefs()
-        self.youtubeURL = Base.getArrYoutubeURL()        
-        #print ()
+        self.mysongs = Base.getArrMysongs()
 
     def daily(self,day=date,category_id=297):
         #華語=297,西洋=390
@@ -35,12 +31,10 @@ class kkbox(object):
         songs = stock_dict['data']['charts']['song']
         for song in songs:
             self.mysongs.append([Base.strclear(song['artist_name']),Base.strclear(song['song_name'])])
-
         Base.printissue()
 
-
     def weekly(self,yesterday=yesterday,cid=297,t="song"):#周四更新榜單
-        yesterday_weekday = int(yesterday.strftime('%w')) #昨天星期幾        
+        yesterday_weekday = int(yesterday.strftime('%w')) #昨天星期幾
         while yesterday_weekday !=4:
             yesterday = yesterday - timedelta(days=1)
             yesterday_weekday = int(yesterday.strftime('%w'))
@@ -56,19 +50,16 @@ class kkbox(object):
         stock_dict = json.loads(res.text)
         songs = stock_dict['data']['charts'][t]
         for song in songs:
-            self.mysongs.append([Base.strclear(song['artist_name']),Base.strclear(song['song_name'])])
+            self.mysongs.append([Base.strclear(song['artist_name']), Base.strclear(song['song_name'])])
             # self.mysongs[0].append()
             # self.mysongs[1].append()
         Base.printissue()
-    
+
 
 class hito(object):
     
     def __init__(self):
-        self.mysongs = Base.getArrMysongs()        
-        self.looks = Base.getArrLooks()
-        self.hrefs = Base.getArrHrefs()
-        self.youtubeURL = Base.getArrYoutubeURL()
+        self.mysongs = Base.getArrMysongs()
     def hitoweekly(self):
         url = "http://www.hitoradio.com/newweb/chart_1_1.php"
         res = requests.get(url)
@@ -98,21 +89,17 @@ class hito(object):
         #print (song[0])
     
 if __name__ == '__main__':
-    yesterday = datetime.now() - timedelta(days=1)# 昨天
-    date = yesterday.strftime('20%y-%m-%d')
 
     kk = kkbox()
-    #kk.daily(date)    
+    #kk.daily(date)
     kk.weekly()
     key = 'AIzaSyDwUr1a8vrEezAggdn4A2KgmoNCvZyDVcc'
     mylist = Base.getArrMysongs()
     for row in mylist:
-        vid = Base.search_hot_v2(key,row[0]+" "+row[1])
+        vid = Base.search_hot(key,row[0]+" "+row[1])
         Base.download_v2(vid,row[0],row[1])
     #kk.search_hot()
     # hh =hito()
     # hh.topyear()
     # Base.search_hot()
     # print(Base.getArrMysongs())
-#age
-#區域成長法
