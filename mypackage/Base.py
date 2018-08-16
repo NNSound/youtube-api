@@ -13,6 +13,11 @@ import sqlite3
 #sys.setdefaultencoding('utf-8')
 
 mysong =[]
+def getKey():
+    with open('../config.json') as f:
+        data = json.load(f)
+    return data['key']
+
 def getArrMysongs():
     return mysong
 

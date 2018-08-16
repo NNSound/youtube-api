@@ -93,7 +93,7 @@ if __name__ == '__main__':
     kk = kkbox()
     #kk.daily(date)
     kk.weekly()
-    key = 'AIzaSyDwUr1a8vrEezAggdn4A2KgmoNCvZyDVcc'
+    key = Base.getKey()
     mylist = Base.getArrMysongs()
     for row in mylist:
         vid = Base.search_hot(key,row[0]+" "+row[1])
