@@ -4,6 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 import pafy
 import os
+import re
 import json
 import youtube_dl
 import sys
@@ -22,8 +23,7 @@ def getArrMysongs():
     return mysong
 
 def strclear(s=''):
-    if '(' in s:  #去除一些不必要的字串
-        s = s[0:s.index('(')]
+    s = re.sub('\/|\(.*\)|\[.*\]', '', s)
     if '-' in s:  #去除一些不必要的字串
         s = s[0:s.index('-')]
     if '"' in s:  #去除一些不必要的字串
@@ -31,7 +31,7 @@ def strclear(s=''):
     return s
 def printissue():
     for row in mysong:
-        print(row[0],row[1])
+        print("\nArtist:"+row[0],"\nSong:"+row[1])
 
 # 根據關鍵字搜尋影片,
 # @param string key, Youtube Key
@@ -49,7 +49,7 @@ def download_v2(videoID,artist,name):
     url = 'https://www.youtube.com/watch?v='+videoID
     ydl_opts = {
         'format': 'bestaudio/best',
-        'outtmpl': artist+" - "+name+'.%(ext)s',
+        'outtmpl': "./music/"+artist+" - "+name+'.%(ext)s',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',

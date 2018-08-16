@@ -92,7 +92,7 @@ if __name__ == '__main__':
 
     kk = kkbox()
     #kk.daily(date)
-    kk.weekly()
+    kk.weekly(cid=390)
     key = Base.getKey()
     mylist = Base.getArrMysongs()
     for row in mylist:
