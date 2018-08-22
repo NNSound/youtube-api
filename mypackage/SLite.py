@@ -47,9 +47,9 @@ def getAll():
     result = cur.fetchall()
     return result
 
-def getOne(col,value):
+def getOne(q):
     cur = connect()
-    sql = "SELECT * FROM AllMusic WHERE "+col+"="+value+";"
+    sql = "SELECT * FROM AllMusic WHERE "+q+";"
     cur.execute(sql)
     result = cur.fetchone()
     return result
@@ -70,6 +70,6 @@ if __name__ == '__main__':
     AllMusic.song = "test"
     AllMusic.video_id = "123456"
     insert()
-    print(getAll())
+    print(getOne)
     # cur = connect()
     # cur.execute("drop table AllMusic;")
