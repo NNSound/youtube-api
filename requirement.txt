@@ -4,3 +4,12 @@ pafy==0.5.3.1
 PyMySQL==0.7.11
 requests==2.18.4
 youtube-dl==2017.10.7
+
+nudatus == 0.0.3 
+setuptools == 39.2.0 
+pyflakes == 2.0.0 
+pycodestyle == 2.4.0 
+appdirs == 1.4.3 
+qtconsole == 4.3.1 
+PyQt5 == 5.11.2 
+pyserial == 3.4

@@ -8,3 +8,5 @@ Now it can get the list from kkbox and hito and use those word to search youtube
 pip install -r requirement.txt
 
 sudo apt install python-pyqt5
+pip install mu-editor
+sudo apt install pacman
