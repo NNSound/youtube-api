@@ -99,15 +99,22 @@ if __name__ == '__main__':
     mylist = Base.getArrMysongs()
     for row in mylist:
         vid = Base.search_hot(key,row[0]+" "+row[1])
-        if (SLite.getOne('video_id = '+vid) == None):
+        sql = "video_id = '" + vid + "'"
+        if (SLite.getOne(sql) == None):
             AllMusic.artist = row[0]
             AllMusic.song = row[1]
             AllMusic.video_id = vid
-            AllMusic.is_download = 1
+            AllMusic.is_download = 0
             SLite.insert()
-            Base.download_v2(vid,row[0],row[1])
+            # Base.download_v2(vid,row[0],row[1])
+        else:
+            print("already has it")
+    print(SLite.getAll())
     #kk.search_hot()
     # hh =hito()
     # hh.topyear()
     # Base.search_hot()
     # print(Base.getArrMysongs())
+    # cur = SLite.connect()
+    # SLite.createtable()
+    # cur.execute("drop table AllMusic;")

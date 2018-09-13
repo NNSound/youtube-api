@@ -50,6 +50,8 @@ def getAll():
 def getOne(q = '1'):
     cur = connect()
     sql = "SELECT * FROM AllMusic WHERE "+str(q)+";"
+    cur.execute(sql)
+    # print(sql)
     result = cur.fetchone()
     return result
 
@@ -73,6 +75,7 @@ def insert():
     #     print ('nothing')
     # else:
     #     print(getOne('song = test'))
+    # print(getAll())
 
     # cur = connect()
     # cur.execute("drop table AllMusic;")
