@@ -1,7 +1,7 @@
 import sqlite3
 import time
 from datetime import datetime
-from models.AllMusic import AllMusic
+from mypackage.models.AllMusic import AllMusic as model
 '''
 db.music.AllMusic
 -------------------------------
@@ -47,29 +47,32 @@ def getAll():
     result = cur.fetchall()
     return result
 
-def getOne(q):
+def getOne(q = '1'):
     cur = connect()
-    sql = "SELECT * FROM AllMusic WHERE "+q+";"
-    cur.execute(sql)
+    sql = "SELECT * FROM AllMusic WHERE "+str(q)+";"
     result = cur.fetchone()
     return result
 
 def insert():
     conn = sqlite3.connect('db.music')
     cur = conn.cursor()
-    AllMusic.created_at = int(time.mktime(datetime.now().timetuple()))
+    model.created_at = int(time.mktime(datetime.now().timetuple()))
 
     cur.execute("INSERT INTO AllMusic (video_id, artist, song, created_at, is_download)\
-            VALUES (?,?,?,?,?);", [AllMusic.video_id, AllMusic.artist, AllMusic.song, AllMusic.created_at, AllMusic.is_download])
+            VALUES (?,?,?,?,?);", [model.video_id, model.artist, model.song, model.created_at, model.is_download])
     conn.commit()
     print("insert success")
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
     # createtable()
-    AllMusic.artist = "MEE"
-    AllMusic.song = "test"
-    AllMusic.video_id = "123456"
-    insert()
-    print(getOne)
+    # model.artist = "MEE"
+    # model.song = "test"
+    # model.video_id = "123456"
+    # insert()
+    # if (getOne('id = 102') == None) :
+    #     print ('nothing')
+    # else:
+    #     print(getOne('song = test'))
+
     # cur = connect()
     # cur.execute("drop table AllMusic;")

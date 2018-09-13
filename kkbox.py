@@ -10,6 +10,8 @@ import pprint
 import pafy
 import os
 from mypackage import Base
+from mypackage.models.AllMusic import AllMusic
+from mypackage import SLite
 
 
 #唯一JSON檔案，告知各種語言歌曲之 category_id 下方會GET['category']之編號
@@ -17,7 +19,7 @@ from mypackage import Base
 
 class kkbox(object):
     yesterday = datetime.now() - timedelta(days=1)# 昨天
-    date = yesterday.strftime('20%y-%m-%d')
+    # date = yesterday.strftime('20%y-%m-%d')
     def __init__(self):
         self.mysongs = Base.getArrMysongs()
 
@@ -92,12 +94,18 @@ if __name__ == '__main__':
 
     kk = kkbox()
     #kk.daily(date)
-    kk.weekly(cid=390)
+    kk.weekly()
     key = Base.getKey()
     mylist = Base.getArrMysongs()
     for row in mylist:
         vid = Base.search_hot(key,row[0]+" "+row[1])
-        Base.download_v2(vid,row[0],row[1])
+        if (SLite.getOne('video_id = '+vid) == None):
+            AllMusic.artist = row[0]
+            AllMusic.song = row[1]
+            AllMusic.video_id = vid
+            AllMusic.is_download = 1
+            SLite.insert()
+            Base.download_v2(vid,row[0],row[1])
     #kk.search_hot()
     # hh =hito()
     # hh.topyear()
