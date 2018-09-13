@@ -1,3 +1,4 @@
+
 class AllMusic():
     video_id = ""
     artist = ""

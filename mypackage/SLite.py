@@ -1,7 +1,10 @@
 import sqlite3
 import time
 from datetime import datetime
-from mypackage.models.AllMusic import AllMusic as model
+
+from AllMusic import AllMusic as model
+
+#TODO 準備棄用
 '''
 db.music.AllMusic
 -------------------------------
