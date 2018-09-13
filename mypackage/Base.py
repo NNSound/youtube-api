@@ -15,7 +15,7 @@ import sqlite3
 
 mysong =[]
 def getKey():
-    with open('../config.json') as f:
+    with open('config.json') as f:
         data = json.load(f)
     return data['key']
 

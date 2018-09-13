@@ -10,9 +10,7 @@ import pprint
 import pafy
 import os
 from mypackage import Base
-from mypackage.models.AllMusic import AllMusic
-from mypackage import SLite
-
+from mypackage.model import AllMusic
 
 #唯一JSON檔案，告知各種語言歌曲之 category_id 下方會GET['category']之編號
 #url = 'https://kma.kkbox.com/charts/api/v1/daily/categories?lang=tc&terr=tw&type=song'
@@ -96,25 +94,21 @@ if __name__ == '__main__':
     #kk.daily(date)
     kk.weekly()
     key = Base.getKey()
+    model = AllMusic()
+    # model.createtable()
+
     mylist = Base.getArrMysongs()
     for row in mylist:
         vid = Base.search_hot(key,row[0]+" "+row[1])
         sql = "video_id = '" + vid + "'"
-        if (SLite.getOne(sql) == None):
-            AllMusic.artist = row[0]
-            AllMusic.song = row[1]
-            AllMusic.video_id = vid
-            AllMusic.is_download = 0
-            SLite.insert()
+        model = AllMusic()
+        if (model.getOne(sql) == None):
+            model.artist = row[0]
+            model.song = row[1]
+            model.video_id = vid
+            model.is_download = 0
+            # model.insert()
             # Base.download_v2(vid,row[0],row[1])
         else:
             print("already has it")
-    print(SLite.getAll())
-    #kk.search_hot()
-    # hh =hito()
-    # hh.topyear()
-    # Base.search_hot()
-    # print(Base.getArrMysongs())
-    # cur = SLite.connect()
-    # SLite.createtable()
-    # cur.execute("drop table AllMusic;")
+    # hh = hito()

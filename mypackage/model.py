@@ -18,13 +18,13 @@ class Model(object):
         result = self.cur.fetchall()
         return result
 
-    def getOne(self, tableName, sql):
+    def getOne(self, sql):
         sql = "SELECT * FROM "+self.tableName+" WHERE "+sql+";"
         self.cur.execute(sql)
         result = self.cur.fetchone()
         return result
 
-    def exists(self, tableName, sql):
+    def exists(self, sql):
         sql = "SELECT * FROM "+self.tableName+" WHERE "+sql+";"
         self.cur.execute(sql)
         result = self.cur.fetchone()
@@ -49,3 +49,18 @@ class AllMusic(Model):
         sql = ("INSERT INTO " + self.tableName +" (video_id, artist, song, created_at, is_download)VALUES (?,?,?,?,?);")
         self.cur.execute(sql, [self.video_id, self.artist, self.song, self.is_download, self.create_at])
         self.conn.commit()
+
+    def createtable(self):
+        self.cur.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='AllMusic';")
+        if(self.cur.fetchone()):
+            print("already has table")
+            return
+        sql = "create table AllMusic (\
+                    id           INTEGER PRIMARY KEY  autoincrement   NOT NULL,\
+                    video_id     text                NULL,\
+                    artist       text                NULL,\
+                    song         text                not null,\
+                    created_at   INTEGER             not null,\
+                    is_download  INTEGER             null);"
+        print("create table success")
+        self.cur.execute(sql)
