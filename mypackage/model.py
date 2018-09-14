@@ -42,12 +42,12 @@ class AllMusic(Model):
         self.artist = artist
         self.song = song
         self.is_download = is_download
-        self.create_at = 0
+        self.create_at = int(time.mktime(datetime.now().timetuple()))
 
     def insert(self):
         self.created_at = int(time.mktime(datetime.now().timetuple()))
         sql = ("INSERT INTO " + self.tableName +" (video_id, artist, song, created_at, is_download)VALUES (?,?,?,?,?);")
-        self.cur.execute(sql, [self.video_id, self.artist, self.song, self.is_download, self.create_at])
+        self.cur.execute(sql, [self.video_id, self.artist, self.song, self.create_at, self.is_download,])
         self.conn.commit()
 
     def createtable(self):
