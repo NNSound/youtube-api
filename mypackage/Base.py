@@ -15,7 +15,7 @@ import sqlite3
 
 mysong =[]
 def getKey():
-    with open('../config.json') as f:
+    with open('config.json') as f:
         data = json.load(f)
     return data['key']
 
@@ -46,10 +46,10 @@ def search_hot(key,q):
     return videoId
 
 def download_v2(videoID,artist,name):
-    url = 'https://www.youtube.com/watch?v='+videoID
+    url = 'https://www.youtube.com/watch?v='+str(videoID)
     ydl_opts = {
         'format': 'bestaudio/best',
-        'outtmpl': "./music/"+artist+" - "+name+'.%(ext)s',
+        'outtmpl': "./music0914/"+artist+" - "+name+'.%(ext)s',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',

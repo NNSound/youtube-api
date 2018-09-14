@@ -1,25 +1,25 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+import json
+import os
+import pprint
 import sys
+from datetime import *
+
+import pafy
 # from PyQt4.QtGui import QApplication
 import requests
 from bs4 import BeautifulSoup
-import json
-from datetime import *
-import pprint
-import pafy
-import os
+
 from mypackage import Base
-from mypackage.models.AllMusic import AllMusic
-from mypackage import SLite
+from mypackage.model import AllMusic
 
-
-#唯一JSON檔案，告知各種語言歌曲之 category_id 下方會GET['category']之編號
 #url = 'https://kma.kkbox.com/charts/api/v1/daily/categories?lang=tc&terr=tw&type=song'
+#唯一JSON檔案，告知各種語言歌曲之 category_id 下方會GET['category']之編號
 
 class kkbox(object):
     yesterday = datetime.now() - timedelta(days=1)# 昨天
-    # date = yesterday.strftime('20%y-%m-%d')
+    date = yesterday.strftime('20%y-%m-%d')
     def __init__(self):
         self.mysongs = Base.getArrMysongs()
 
@@ -27,7 +27,7 @@ class kkbox(object):
         #華語=297,西洋=390
         # cid = str(category_id)
         url = 'https://kma.kkbox.com/charts/api/v1/daily'
-        dic = {'date':day,'type':'song','category':category_id,'lang':'tc','limit':50,'terr':'tw'}
+        dic = {'date':day, 'type':'song', 'category':category_id, 'lang':'tc', 'limit':50, 'terr':'tw'}
         res = requests.get(url,params=dic)
         stock_dict = json.loads(res.text)
         songs = stock_dict['data']['charts']['song']
@@ -40,14 +40,14 @@ class kkbox(object):
         while yesterday_weekday !=4:
             yesterday = yesterday - timedelta(days=1)
             yesterday_weekday = int(yesterday.strftime('%w'))
-            date = yesterday.strftime('20%y-%m-%d')
+            self.date = self.yesterday.strftime('20%y-%m-%d')
         # self.date = str(date)
         # self.cid = str(cid) #華語=297,西洋=390
         # self.type = t  #新歌:newrelease 、 單曲 song
         #https://kma.kkbox.com/charts/api/v1/weekly?category=297&date=2018-03-08&lang=tc&limit=50&terr=tw&type=newrelease 每周新歌榜單
         #一樣由上面的網址決定，榜單只存兩周，category_id type有 新歌:newrelease ， 單曲 song
         url = 'https://kma.kkbox.com/charts/api/v1/weekly'
-        dic = {'date':date,'type':t,'category':cid,'lang':'tc','limit':50,'terr':'tw'}
+        dic = {'date':self.date, 'type':t, 'category':cid, 'lang':'tc', 'limit':50,'terr':'tw'}
         res = requests.get(url,params=dic)
         stock_dict = json.loads(res.text)
         songs = stock_dict['data']['charts'][t]
@@ -96,25 +96,21 @@ if __name__ == '__main__':
     #kk.daily(date)
     kk.weekly()
     key = Base.getKey()
+    model = AllMusic()
+    # model.createtable()
+
     mylist = Base.getArrMysongs()
     for row in mylist:
         vid = Base.search_hot(key,row[0]+" "+row[1])
         sql = "video_id = '" + vid + "'"
-        if (SLite.getOne(sql) == None):
-            AllMusic.artist = row[0]
-            AllMusic.song = row[1]
-            AllMusic.video_id = vid
-            AllMusic.is_download = 0
-            SLite.insert()
-            # Base.download_v2(vid,row[0],row[1])
+        model = AllMusic()
+        if (model.getOne(sql) == None):
+            model.artist = row[0]
+            model.song = row[1]
+            model.video_id = vid
+            model.is_download = 1
+            model.insert()
+            Base.download_v2(vid,row[0],row[1])
         else:
             print("already has it")
-    print(SLite.getAll())
-    #kk.search_hot()
-    # hh =hito()
-    # hh.topyear()
-    # Base.search_hot()
-    # print(Base.getArrMysongs())
-    # cur = SLite.connect()
-    # SLite.createtable()
-    # cur.execute("drop table AllMusic;")
+    # hh = hito()
