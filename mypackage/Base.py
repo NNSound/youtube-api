@@ -28,6 +28,8 @@ def strclear(s=''):
         s = s[0:s.index('-')]
     if '"' in s:  #去除一些不必要的字串
         s = s[0:s.index('"')]
+    s.rstrip()
+    s.lstrip()
     return s
 def printissue():
     for row in mysong:
