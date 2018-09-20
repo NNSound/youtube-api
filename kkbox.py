@@ -88,14 +88,14 @@ class hito(object):
 if __name__ == '__main__':
 
     kk = kkbox()
-    
+
     kk.daily()
     kk.weekly()
     kk.weekly(cid=390)
 
     key = Base.getKey()
     model = AllMusic()
-    # model.createtable()
+    model.createtable()
 
     mylist = Base.getArrMysongs()
     for row in mylist:
