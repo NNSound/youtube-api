@@ -38,6 +38,9 @@ r = requests.get(url, params=dic)
 print(r.text)
 #And you would get the info json
 ```
+Docs:
+https://developers.google.com/youtube/v3/getting-started
+
 
 You don't need to do this(it only my note):  
 sudo apt install python-pyqt5
