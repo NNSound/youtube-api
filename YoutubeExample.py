@@ -9,8 +9,8 @@ import sys
 #reload(sys)
 #sys.setdefaultencoding('utf-8')
 
-#url = 'https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCPcF3KTqhD67ADkukx_OeDg&key=AIzaSyDwUr1a8vrEezAggdn4A2KgmoNCvZyDVcc'
-url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&key=AIzaSyDwUr1a8vrEezAggdn4A2KgmoNCvZyDVcc&type=video&q=體面&order=viewCount&maxResults=1'
+#url = 'https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCPcF3KTqhD67ADkukx_OeDg&key='
+url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&key=&type=video&q=體面&order=viewCount&maxResults=1'
 #sg_WE0ToJjM
 
 r = requests.get(url)
