@@ -39,11 +39,9 @@ def printissue():
 
 def getLastThursday():
     current_time = datetime.datetime.now()
-    last_thursday= (current_time.date()
+    last_thursday = (current_time.date()
     - datetime.timedelta(days=current_time.weekday())
     + datetime.timedelta(days=3, weeks=-1))
-
-    # last_thursday = last_thursday.strftime("%Y-%m-%d")
     return last_thursday.strftime("%Y-%m-%d")
 
 # 根據關鍵字搜尋影片,
@@ -60,9 +58,12 @@ def search_hot(key,q):
 
 def download_v2(videoID,artist,name):
     url = 'https://www.youtube.com/watch?v='+str(videoID)
+    current_time = datetime.datetime.now()
+    current_time = current_time.strftime("%Y-%m-%d")
+    #TODO 根據曲風分配資料夾
     ydl_opts = {
         'format': 'bestaudio/best',
-        'outtmpl': "./music0914/"+artist+" - "+name+'.%(ext)s',
+        'outtmpl': "./music/"+current_time+'/'+artist+" - "+name+'.%(ext)s',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',

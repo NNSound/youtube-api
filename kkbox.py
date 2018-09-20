@@ -23,16 +23,17 @@ class kkbox(object):
     def __init__(self):
         self.mysongs = Base.getArrMysongs()
 
-    def daily(self,day=date,category_id=297):
         #華語=297,西洋=390
-        # cid = str(category_id)
+    def daily(self,day=None,cid=297):
+        if (day == None):
+            day = self.date
         url = 'https://kma.kkbox.com/charts/api/v1/daily'
-        dic = {'date':day, 'type':'song', 'category':category_id, 'lang':'tc', 'limit':50, 'terr':'tw'}
+        dic = {'date':day, 'type':'song', 'category':cid, 'lang':'tc', 'limit':50, 'terr':'tw'}
         res = requests.get(url,params=dic)
         stock_dict = json.loads(res.text)
         songs = stock_dict['data']['charts']['song']
         for song in songs:
-            self.mysongs.append([Base.strclear(song['artist_name']),Base.strclear(song['song_name'])])
+            self.mysongs.append([Base.strclear(song['artist_name']), Base.strclear(song['song_name'])])
         Base.printissue()
 
         #cid: 華語=297,西洋=390 
@@ -87,8 +88,11 @@ class hito(object):
 if __name__ == '__main__':
 
     kk = kkbox()
-    #kk.daily(date)
+    
+    kk.daily()
     kk.weekly()
+    kk.weekly(cid=390)
+
     key = Base.getKey()
     model = AllMusic()
     # model.createtable()
@@ -102,9 +106,9 @@ if __name__ == '__main__':
             model.artist = row[0]
             model.song = row[1]
             model.video_id = vid
-            model.is_download = 1
+            model.is_download = 0
             model.insert()
             # Base.download_v2(vid,row[0],row[1])
         else:
-            print("already has it")
+            print("Already has:"+row[0]+"-"+row[1])
     # hh = hito()
