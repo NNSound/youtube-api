@@ -1,14 +1,16 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-import requests
-from bs4 import BeautifulSoup
-import pafy
+import json
 import os
 import re
-import json
-import youtube_dl
-import sys
 import sqlite3
+import sys
+import datetime
+
+import pafy
+import requests
+import youtube_dl
+from bs4 import BeautifulSoup
 
 #reload(sys)
 #sys.setdefaultencoding('utf-8')
@@ -28,12 +30,21 @@ def strclear(s=''):
         s = s[0:s.index('-')]
     if '"' in s:  #去除一些不必要的字串
         s = s[0:s.index('"')]
-    s.rstrip()
-    s.lstrip()
+    s = s.rstrip()
+    s = s.lstrip()
     return s
 def printissue():
     for row in mysong:
         print("\nArtist:"+row[0],"\nSong:"+row[1])
+
+def getLastThursday():
+    current_time = datetime.datetime.now()
+    last_thursday= (current_time.date()
+    - datetime.timedelta(days=current_time.weekday())
+    + datetime.timedelta(days=3, weeks=-1))
+
+    # last_thursday = last_thursday.strftime("%Y-%m-%d")
+    return last_thursday.strftime("%Y-%m-%d")
 
 # 根據關鍵字搜尋影片,
 # @param string key, Youtube Key

@@ -35,26 +35,20 @@ class kkbox(object):
             self.mysongs.append([Base.strclear(song['artist_name']),Base.strclear(song['song_name'])])
         Base.printissue()
 
-    def weekly(self,yesterday=yesterday,cid=297,t="song"):#周四更新榜單
-        yesterday_weekday = int(yesterday.strftime('%w')) #昨天星期幾
-        while yesterday_weekday !=4:
-            yesterday = yesterday - timedelta(days=1)
-            yesterday_weekday = int(yesterday.strftime('%w'))
-            self.date = self.yesterday.strftime('20%y-%m-%d')
-        # self.date = str(date)
-        # self.cid = str(cid) #華語=297,西洋=390
-        # self.type = t  #新歌:newrelease 、 單曲 song
+        #cid: 華語=297,西洋=390 
+        #t: 新歌:newrelease 、 單曲 song
+    def weekly(self,yesterday=yesterday,cid=297,t="song"):
+        self.date = str(Base.getLastThursday())
         #https://kma.kkbox.com/charts/api/v1/weekly?category=297&date=2018-03-08&lang=tc&limit=50&terr=tw&type=newrelease 每周新歌榜單
-        #一樣由上面的網址決定，榜單只存兩周，category_id type有 新歌:newrelease ， 單曲 song
+        #一樣由上面的網址決定，榜單只存兩周
         url = 'https://kma.kkbox.com/charts/api/v1/weekly'
         dic = {'date':self.date, 'type':t, 'category':cid, 'lang':'tc', 'limit':50,'terr':'tw'}
         res = requests.get(url,params=dic)
         stock_dict = json.loads(res.text)
         songs = stock_dict['data']['charts'][t]
+        #TODO 要判斷是否存在元素
         for song in songs:
             self.mysongs.append([Base.strclear(song['artist_name']), Base.strclear(song['song_name'])])
-            # self.mysongs[0].append()
-            # self.mysongs[1].append()
         Base.printissue()
 
 
@@ -110,7 +104,7 @@ if __name__ == '__main__':
             model.video_id = vid
             model.is_download = 1
             model.insert()
-            Base.download_v2(vid,row[0],row[1])
+            # Base.download_v2(vid,row[0],row[1])
         else:
             print("already has it")
     # hh = hito()
