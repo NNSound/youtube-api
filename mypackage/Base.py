@@ -50,7 +50,7 @@ def getLastThursday():
 # @return string videoId, 影片ID
 def search_hot(key,q):
     url = 'https://www.googleapis.com/youtube/v3/search'
-    dic = {'part':'snippet','key':key,'type':'video','q':q,'order':'viewCount','maxResults':1}
+    dic = {'part':'snippet','key':key,'type':'video','q':q,'maxResults':1}
     r = requests.get(url,params=dic)
     json_data = json.loads(r.text)
     videoId = json_data['items'][0]['id']['videoId']

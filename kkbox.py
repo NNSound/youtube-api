@@ -92,6 +92,9 @@ if __name__ == '__main__':
     kk.daily()
     kk.weekly()
     kk.weekly(cid=390)
+    kk.weekly(cid=324)
+    kk.weekly(cid=352)
+
 
     key = Base.getKey()
     model = AllMusic()
@@ -107,8 +110,9 @@ if __name__ == '__main__':
             model.song = row[1]
             model.video_id = vid
             model.is_download = 0
+            Base.download_v2(vid,row[0],row[1])
+            model.is_download = 1
             model.insert()
-            # Base.download_v2(vid,row[0],row[1])
         else:
             print("Already has:"+row[0]+"-"+row[1])
     # hh = hito()
