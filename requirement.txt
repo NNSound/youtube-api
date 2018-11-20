@@ -11,5 +11,4 @@ pyflakes == 2.0.0
 pycodestyle == 2.4.0 
 appdirs == 1.4.3 
 qtconsole == 4.3.1 
-PyQt5 == 5.11.2 
 pyserial == 3.4
