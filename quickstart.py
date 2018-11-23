@@ -8,6 +8,8 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from google_auth_oauthlib.flow import InstalledAppFlow
 from oauth2client import file, client, tools
+import json
+
 
 
 # The CLIENT_SECRETS_FILE variable specifies the name of a file that contains
@@ -42,6 +44,30 @@ def channels_list_by_username(service, **kwargs):
         results['items'][0]['snippet']['title'],
         results['items'][0]['statistics']['viewCount']))
 
+
+# Remove keyword arguments that are not set
+def remove_empty_kwargs(**kwargs):
+  good_kwargs = {}
+  if kwargs is not None:
+    for key, value in kwargs.items():
+      if value:
+        good_kwargs[key] = value
+  return good_kwargs
+
+def playlists_list_mine(client, **kwargs):
+  # See full sample for function
+  kwargs = remove_empty_kwargs(**kwargs)
+
+  response = client.playlists().list(
+    **kwargs
+  ).execute()
+
+  return response
+  # return print_response(response)
+
+def print_response(response):
+  print(response)
+
 if __name__ == '__main__':
   # When running locally, disable OAuthlib's HTTPs verification. When
   # running in production *do not* leave this option enabled.
@@ -49,6 +75,16 @@ if __name__ == '__main__':
   os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
   service = get_authenticated_service()
 
-  channels_list_by_username(service,
-      part='snippet,contentDetails,statistics',
-      forUsername='GoogleDevelopers')
+  # channels_list_by_username(service,
+  #     part='snippet,contentDetails,statistics',
+  #     forUsername='GoogleDevelopers')
+  playList =  playlists_list_mine(service,
+    part='snippet,contentDetails',
+    mine=True,
+    maxResults=25,
+    onBehalfOfContentOwner='',
+    onBehalfOfContentOwnerChannel='')
+
+  # print(playList['items'][0]['id'])
+  for listID in playList['items']:
+    print(listID['id'])

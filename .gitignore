@@ -1,7 +1,9 @@
 token.json
 config.json
 client_secret.json
-.pyc
 test.py
 db.music
 /music
+.pyc
+.vscode/
+__pycache__/
