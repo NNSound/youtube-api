@@ -65,6 +65,16 @@ def playlists_list_mine(client, **kwargs):
   return response
   # return print_response(response)
 
+def playlist_items_list_by_playlist_id(client, **kwargs):
+  # See full sample for function
+  kwargs = remove_empty_kwargs(**kwargs)
+
+  response = client.playlistItems().list(
+    **kwargs
+  ).execute()
+
+  return print_response(response)
+
 def print_response(response):
   print(response)
 
@@ -85,6 +95,11 @@ if __name__ == '__main__':
     onBehalfOfContentOwner='',
     onBehalfOfContentOwnerChannel='')
 
+  playlist_items_list_by_playlist_id(service,
+    part='snippet,contentDetails',
+    maxResults=25,
+    playlistId='PLBkfHJJm7DdrXGVI2A1OOD-Os_uoYCDCd')
+
   # print(playList['items'][0]['id'])
-  for listID in playList['items']:
-    print(listID['id'])
+  # for listID in playList['items']:
+  #   print(listID['id'])
