@@ -34,17 +34,6 @@ def get_authenticated_service():
   # credentials = flow.run_console()
   return build(API_SERVICE_NAME, API_VERSION, credentials = credentials)
 
-def channels_list_by_username(service, **kwargs):
-  results = service.channels().list(
-    **kwargs
-  ).execute()
-  
-  print('This channel\'s ID is %s. Its title is %s, and it has %s views.' %
-       (results['items'][0]['id'],
-        results['items'][0]['snippet']['title'],
-        results['items'][0]['statistics']['viewCount']))
-
-
 # Remove keyword arguments that are not set
 def remove_empty_kwargs(**kwargs):
   good_kwargs = {}
@@ -85,9 +74,6 @@ if __name__ == '__main__':
   os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
   service = get_authenticated_service()
 
-  # channels_list_by_username(service,
-  #     part='snippet,contentDetails,statistics',
-  #     forUsername='GoogleDevelopers')
   playList =  playlists_list_mine(service,
     part='snippet,contentDetails',
     mine=True,
@@ -95,11 +81,11 @@ if __name__ == '__main__':
     onBehalfOfContentOwner='',
     onBehalfOfContentOwnerChannel='')
 
-  playlist_items_list_by_playlist_id(service,
-    part='snippet,contentDetails',
-    maxResults=25,
-    playlistId='PLBkfHJJm7DdrXGVI2A1OOD-Os_uoYCDCd')
+  # playlist_items_list_by_playlist_id(service,
+  #   part='snippet,contentDetails',
+  #   maxResults=25,
+  #   playlistId='PLBkfHJJm7DdoXZuoJ-bchwt_cyTcVx63Y')
 
-  # print(playList['items'][0]['id'])
-  # for listID in playList['items']:
-  #   print(listID['id'])
+  # print(playList['items'][0]['snippet']['title'])
+  for listID in playList['items']:
+    print('Title:' + listID['snippet']['title'] + ', ID: ' + listID['id'])
