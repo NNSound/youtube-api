@@ -9,7 +9,7 @@ from googleapiclient.errors import HttpError
 from google_auth_oauthlib.flow import InstalledAppFlow
 from oauth2client import file, client, tools
 import json
-
+import re
 
 
 # The CLIENT_SECRETS_FILE variable specifies the name of a file that contains
@@ -62,7 +62,7 @@ def playlist_items_list_by_playlist_id(client, **kwargs):
     **kwargs
   ).execute()
 
-  return print_response(response)
+  return response
 
 def print_response(response):
   print(response)
@@ -74,18 +74,20 @@ if __name__ == '__main__':
   os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
   service = get_authenticated_service()
 
-  playList =  playlists_list_mine(service,
-    part='snippet,contentDetails',
-    mine=True,
-    maxResults=25,
-    onBehalfOfContentOwner='',
-    onBehalfOfContentOwnerChannel='')
-
-  # playlist_items_list_by_playlist_id(service,
-  #   part='snippet,contentDetails',
+  # playList =  playlists_list_mine(service,
+  #   part='snippet',
+  #   mine=True,
   #   maxResults=25,
-  #   playlistId='PLBkfHJJm7DdoXZuoJ-bchwt_cyTcVx63Y')
+  #   onBehalfOfContentOwner='',
+  #   onBehalfOfContentOwnerChannel='')
+
+  items = playlist_items_list_by_playlist_id(service,
+    part='snippet',
+    maxResults=2,
+    playlistId='PLBkfHJJm7DdoXZuoJ-bchwt_cyTcVx63Y')
+  print(items['items'][0]['snippet'])
 
   # print(playList['items'][0]['snippet']['title'])
-  for listID in playList['items']:
-    print('Title:' + listID['snippet']['title'] + ', ID: ' + listID['id'])
+  # for listID in playList['items']:
+  #   if (re.search('MUSIC', listID['snippet']['title'])):
+  #     print('Title:' + listID['snippet']['title'] + ', ID: ' + listID['id'])
