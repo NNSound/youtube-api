@@ -10,5 +10,4 @@ setuptools == 39.2.0
 pyflakes == 2.0.0 
 pycodestyle == 2.4.0 
 appdirs == 1.4.3 
-qtconsole == 4.3.1 
 pyserial == 3.4
