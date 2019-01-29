@@ -104,7 +104,7 @@ if __name__ == '__main__':
         if (re.search('MUSIC', listID['snippet']['title'])):            
             print('Title:' + listID['snippet']['title'] + ', ID: ' + listID['id'])
             playList = userPlaylists.playlist_items_list_by_playlist_id(service,
-                part='snippet,contentDetails',
+                part='snippet',
                 maxResults=25,
                 playlistId=listID['id'])
             for item in playList['items']:
