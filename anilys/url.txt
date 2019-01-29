@@ -1,0 +1,7 @@
+http://isrc.ncl.edu.tw/search_result_isrc.aspx
+?media_kind1=false&
+media_kind2=false&
+search_year=所有&
+search_month=所有&
+search_kind=所有欄位&
+search_string=

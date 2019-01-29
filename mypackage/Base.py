@@ -11,6 +11,7 @@ import pafy
 import requests
 import youtube_dl
 from bs4 import BeautifulSoup
+import pathvalidate
 
 #reload(sys)
 #sys.setdefaultencoding('utf-8')
@@ -33,6 +34,8 @@ def strclear(s=''):
     s = s.rstrip()
     s = s.lstrip()
     return s
+def strclear_v2(s=''):
+    return pathvalidate.sanitize_python_var_name(s)
 def printissue():
     for row in mysong:
         print("\nArtist:"+row[0],"\nSong:"+row[1])
@@ -64,6 +67,24 @@ def download_v2(videoID,artist,name):
     ydl_opts = {
         'format': 'bestaudio/best',
         'outtmpl': "./music/"+current_time+'/'+artist+" - "+name+'.%(ext)s',
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
+        }]
+    }
+    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        ydl.download([url])
+
+def download_v3(videoID, fileName):
+    # fileName = strclear_v2(fileName)
+    url = 'https://www.youtube.com/watch?v='+str(videoID)
+    current_time = datetime.datetime.now()
+    current_time = current_time.strftime("%Y-%m-%d")
+    #TODO 根據曲風分配資料夾
+    ydl_opts = {
+        'format': 'bestaudio/best',
+        'outtmpl': "./music/"+current_time+'/'+ fileName + '.%(ext)s',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',

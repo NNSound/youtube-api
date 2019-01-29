@@ -7,7 +7,6 @@ import sys
 from datetime import *
 
 import pafy
-# from PyQt4.QtGui import QApplication
 import requests
 from bs4 import BeautifulSoup
 
@@ -94,7 +93,6 @@ if __name__ == '__main__':
     kk.weekly(cid=390)
     kk.weekly(cid=324)
     kk.weekly(cid=352)
-
 
     key = Base.getKey()
     model = AllMusic()
