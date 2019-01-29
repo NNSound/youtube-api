@@ -26,7 +26,8 @@ https://console.cloud.google.com/apis/credentials
 ```
 And that all.  
 
-Example:
+Example:  
+https://github.com/NNSound/youtube-api/blob/master/demo.py
 ```
 import requests
 import json
@@ -38,6 +39,15 @@ r = requests.get(url, params=dic)
 print(r.text)
 #And you would get the info json
 ```
+How to run demo:  
+```
+python demo.py
+```
+or  
+```
+python3 demo.py
+```
+
 Docs:
 https://developers.google.com/youtube/v3/getting-started
 
