@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 class Model(object):
-    
+    #TODO sql need to fix
     def __init__(self, tableName):
         self.conn = sqlite3.connect('db.music')
         self.cur = self.conn.cursor()
@@ -36,8 +36,9 @@ class Model(object):
 class AllMusic(Model):
     tableName = "AllMusic"
     def __init__(self, video_id="", artist="", song="", is_download=0):
-        super().__init__("AllMusic")
         self.tableName = "AllMusic"
+        super().__init__(self.tableName)
+        
         self.video_id = video_id
         self.artist = artist
         self.song = song
@@ -51,9 +52,10 @@ class AllMusic(Model):
         self.conn.commit()
 
     def createtable(self):
-        self.cur.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='AllMusic';")
+        #TODO sql need to fix
+        self.cur.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='" + self.tableName + "';")
         if(self.cur.fetchone()):
-            print("already has table")
+            print("already has table " + self.tableName)
             return
         sql = "create table AllMusic (\
                     id           INTEGER PRIMARY KEY  autoincrement   NOT NULL,\

@@ -34,8 +34,10 @@ def strclear(s=''):
     s = s.rstrip()
     s = s.lstrip()
     return s
+
 def strclear_v2(s=''):
     return pathvalidate.sanitize_python_var_name(s)
+    
 def printissue():
     for row in mysong:
         print("\nArtist:"+row[0],"\nSong:"+row[1])
