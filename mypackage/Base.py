@@ -71,7 +71,7 @@ def download_v2(videoID,artist,name):
         'outtmpl': "./music/"+current_time+'/'+artist+" - "+name+'.%(ext)s',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
+            'preferredcodec': 'flac',
             'preferredquality': '192',
         }]
     }
@@ -86,10 +86,10 @@ def download_v3(videoID, fileName):
     #TODO 根據曲風分配資料夾
     ydl_opts = {
         'format': 'bestaudio/best',
-        'outtmpl': "./music/"+current_time+'/'+ fileName + '.%(ext)s',
+        'outtmpl': "./music/flac/"+current_time+'/'+ fileName + '.%(ext)s',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
+            'preferredcodec': 'flac',
             'preferredquality': '192',
         }]
     }

@@ -89,8 +89,8 @@ if __name__ == '__main__':
     kk = kkbox()
 
     kk.daily()
-    kk.weekly()
-    kk.weekly(cid=390)
+    kk.weekly()#297華語
+    kk.weekly(cid=390)#西洋
     kk.weekly(cid=324)
     kk.weekly(cid=352)
 

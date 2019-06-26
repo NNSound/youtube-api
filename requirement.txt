@@ -3,7 +3,7 @@ lxml>=4.0.0
 pafy==0.5.3.1
 PyMySQL==0.7.11
 requests>=2.20.0
-youtube-dl >=2018.9.10 
+youtube-dl >=2019.5.20
 
 nudatus == 0.0.3 
 setuptools == 39.2.0 
