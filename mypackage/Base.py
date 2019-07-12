@@ -86,7 +86,7 @@ def download_v3(videoID, fileName):
     #TODO 根據曲風分配資料夾
     ydl_opts = {
         'format': 'bestaudio/best',
-        'outtmpl': "./music/flac/"+current_time+'/'+ fileName + '.%(ext)s',
+        'outtmpl': "/media/rd/新增磁碟區/music/flac/"+current_time+'/'+ fileName + '.%(ext)s',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'flac',

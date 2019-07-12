@@ -13,13 +13,13 @@ import sys
 url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&key=&type=video&q=體面&order=viewCount&maxResults=1'
 #sg_WE0ToJjM
 
-r = requests.get(url)
-json_data = json.loads(r.text)
-videoId = json_data['items'][0]['id']['videoId']
-print (videoId)
+# r = requests.get(url)
+# json_data = json.loads(r.text)
+# videoId = json_data['items'][0]['id']['videoId']
+# print (videoId)
 
-url = 'https://www.youtube.com/watch?v='+videoId
-url2 = 'https://www.youtube.com/watch?v=zOEISgh7k_g'
+# url = 'https://www.youtube.com/watch?v='+videoId
+url = 'https://www.youtube.com/watch?v=zOEISgh7k_g'
 
 artist = "于文文 - "
 name = "體面"

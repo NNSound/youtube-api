@@ -9,7 +9,7 @@ class Model(object):
         self.conn = sqlite3.connect('db.music')
         self.cur = self.conn.cursor()
         self.tableName = tableName
-        print('connect to db.music success')
+        # print('connect to db.music success')
 
 #select
     def getAll(self):
