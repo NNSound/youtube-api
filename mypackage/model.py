@@ -13,7 +13,7 @@ class Model(object):
 
 #select
     def getAll(self):
-        sql = "SELECT * FROM "+self.tableName+";"
+        sql = "SELECT * FROM %s ;"%(self.tableName)
         self.cur.execute(sql)
         result = self.cur.fetchall()
         return result

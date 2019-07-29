@@ -6,6 +6,7 @@ import pprint
 import sys
 from datetime import *
 
+import re
 import pafy
 import requests
 from bs4 import BeautifulSoup
@@ -83,34 +84,83 @@ class hito(object):
                 self.mysongs.append(line[3].get_text()+"+"+line[1].get_text())
         #Base.search_hot(self.mysongs)
         #print (song[0])
+
+class mojim(object):
+    def __init__(self):
+        self.mysongs = Base.getArrMysongs()
     
+    def getlist(self):
+        url = "http://mojim.com/twzhot-song.htm"
+        res = requests.get(url)
+        soup = BeautifulSoup(res.text, "lxml")
+        table  = soup.find('td',id="mx45_M").find('table')
+        tagList = table.find_all('div')
+        tagList.remove(tagList[7])
+        for tag in tagList:
+            songs = tag.find_all('td')
+            for song in songs:
+                item = song.find('a')
+                artist = song.find('a', class_="X1")
+                if item is not None:
+                    item = re.split('[0-9]+\.', item.get_text())
+                    artist = re.split('[<](.*)[>]', artist.get_text())
+                    self.mysongs.append([Base.strclear(artist[1].strip()), Base.strclear(item[1])])
+        Base.printissue()
+    
+# if __name__ == '__main__':
+
+#     kk = kkbox()
+
+#     kk.daily()
+#     kk.weekly()#297華語
+#     kk.weekly(cid=390)#西洋
+#     kk.weekly(cid=324)
+#     kk.weekly(cid=352)
+
+#     key = Base.getKey()
+#     model = AllMusic()
+#     model.createtable()
+
+#     mylist = Base.getArrMysongs()
+#     for row in mylist:
+#         vid = Base.search_hot(key,row[0]+" "+row[1])
+#         sql = "video_id = '" + vid + "'"
+#         model = AllMusic()
+#         if (model.getOne(sql) == None):
+#             model.artist = row[0]
+#             model.song = row[1]
+#             model.video_id = vid
+#             model.is_download = 0
+#             # Base.download_v2(vid,row[0],row[1])
+#             model.is_download = 1
+#             model.insert()
+#         else:
+#             print("Already has:"+row[0]+"-"+row[1])
+
+
 if __name__ == '__main__':
 
-    kk = kkbox()
-
-    kk.daily()
-    kk.weekly()#297華語
-    kk.weekly(cid=390)#西洋
-    kk.weekly(cid=324)
-    kk.weekly(cid=352)
+    mm = mojim()
+    mm.getlist()
 
     key = Base.getKey()
-    model = AllMusic()
-    model.createtable()
-
     mylist = Base.getArrMysongs()
     for row in mylist:
-        vid = Base.search_hot(key,row[0]+" "+row[1])
-        sql = "video_id = '" + vid + "'"
-        model = AllMusic()
-        if (model.getOne(sql) == None):
-            model.artist = row[0]
-            model.song = row[1]
-            model.video_id = vid
-            model.is_download = 0
-            Base.download_v2(vid,row[0],row[1])
-            model.is_download = 1
-            model.insert()
-        else:
-            print("Already has:"+row[0]+"-"+row[1])
-    # hh = hito()
+
+        try:
+            vid = Base.search_hot(key,row[0]+" "+row[1])
+            sql = "video_id = '" + vid + "'"
+            model = AllMusic()
+            if (model.getOne(sql) == None):
+                model.artist = row[0]
+                model.song = row[1]
+                model.video_id = vid
+                model.is_download = 0
+                # Base.download_v2(vid,row[0],row[1])
+                model.insert()
+            else:
+                print("Already has:"+row[0]+"-"+row[1])
+        except:
+            print("[Error]:%s - %s"%(row[0], row[1]))
+
+        
