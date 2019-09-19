@@ -95,7 +95,8 @@ class mojim(object):
         soup = BeautifulSoup(res.text, "lxml")
         table  = soup.find('td',id="mx45_M").find('table')
         tagList = table.find_all('div')
-        tagList.remove(tagList[7])
+        tagList.remove(tagList[7])#略過其他
+        tagList.remove(tagList[6])#略過日文
         for tag in tagList:
             songs = tag.find_all('td')
             for song in songs:

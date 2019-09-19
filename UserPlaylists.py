@@ -101,7 +101,7 @@ if __name__ == '__main__':
         onBehalfOfContentOwnerChannel='')
 
     for listID in playLists['items']:
-        if (re.search('MUSIC', listID['snippet']['title'])):            
+        if (re.search('MUSIC', listID['snippet']['title'])):
             print('Title:' + listID['snippet']['title'] + ', ID: ' + listID['id'])
             playList = userPlaylists.playlist_items_list_by_playlist_id(service,
                 part='snippet',

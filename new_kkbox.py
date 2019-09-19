@@ -8,8 +8,8 @@ kk = kkbox()
 kk.daily()
 kk.weekly()#297華語
 kk.weekly(cid=390)#西洋
-kk.weekly(cid=324)
-kk.weekly(cid=352)
+# kk.weekly(cid=324)
+# kk.weekly(cid=352)
 
 key = Base.getKey()
 model = AllMusic()
@@ -28,5 +28,6 @@ for row in mylist:
         # Base.download_v2(vid,row[0],row[1])
         model.is_download = 1
         model.insert()
+        print("[INSERT] %s-%s"%(row[0], row[1]))
     else:
-        print("Already has:"+row[0]+"-"+row[1])
+        print("[PASS]Already has:%s-%s"%(row[0], row[1]))
