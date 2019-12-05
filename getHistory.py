@@ -22,6 +22,7 @@ def getList():
 
 if __name__ == "__main__":
     songList = getList()
+    #1170
     # print(songList[0][1])
     i = 1
     for song in songList:
@@ -29,8 +30,8 @@ if __name__ == "__main__":
             print("SongName:%s,vid:%s"%(song[3], song[1]))
             Base.download_v3(song[1], song[3])
             i = i +1
-            if (i % 10 == 0):
-                time.sleep(5)
+            # if (i % 10 == 0):
+            #     time.sleep(5)
         except Exception as e:
             print("Error:%s"%(song[3]))
             print(str(e))

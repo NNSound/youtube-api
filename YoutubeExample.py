@@ -19,16 +19,16 @@ url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&key=&type=video
 # print (videoId)
 
 # url = 'https://www.youtube.com/watch?v='+videoId
-url = 'https://www.youtube.com/watch?v=zOEISgh7k_g'
+url = 'https://www.youtube.com/watch?v=lKo4kIF7UdU'
 
-artist = "于文文 - "
-name = "體面"
+artist = "周二珂 - "
+name = "匆匆那年"
 ydl_opts = {
     'format': 'bestaudio/best',
     'outtmpl': artist+name+'.%(ext)s',
     'postprocessors': [{
         'key': 'FFmpegExtractAudio',
-        'preferredcodec': 'mp3',
+        'preferredcodec': 'flac',
         'preferredquality': '192',
     }]
 }

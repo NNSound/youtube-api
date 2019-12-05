@@ -25,7 +25,7 @@ for row in mylist:
         model.song = row[1]
         model.video_id = vid
         model.is_download = 0
-        # Base.download_v2(vid,row[0],row[1])
+        Base.download_v3(vid,row[0],row[1])
         model.is_download = 1
         model.insert()
         print("[INSERT] %s-%s"%(row[0], row[1]))
