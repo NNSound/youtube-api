@@ -58,6 +58,7 @@ def search_hot(key,q):
     dic = {'part':'snippet','key':key,'type':'video','q':q,'maxResults':1}
     r = requests.get(url,params=dic)
     json_data = json.loads(r.text)
+    # print(json_data)
     videoId = json_data['items'][0]['id']['videoId']
     return videoId
 
@@ -65,7 +66,7 @@ def download_v2(videoID,artist,name):
     url = 'https://www.youtube.com/watch?v='+str(videoID)
     current_time = datetime.datetime.now()
     current_time = current_time.strftime("%Y-%m-%d")
-    #TODO 根據曲風分配資料夾
+    #TODO 根據曲風分配資料夾a
     ydl_opts = {
         'format': 'bestaudio/best',
         'outtmpl': "./music/"+current_time+'/'+artist+" - "+name+'.%(ext)s',
@@ -86,7 +87,7 @@ def download_v3(videoID, fileName):
     #TODO 根據曲風分配資料夾
     ydl_opts = {
         'format': 'bestaudio/best',
-        'outtmpl': "/media/rd/新增磁碟區1/music/flac/"+current_time+'/'+ fileName + '.%(ext)s',
+        'outtmpl': "/home/alex/音樂/flac/"+current_time+'/'+ fileName + '.%(ext)s',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'flac',

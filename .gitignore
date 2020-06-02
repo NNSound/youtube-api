@@ -7,3 +7,4 @@ db.music
 .pyc
 .vscode/
 __pycache__/
+serviceAccountKey.json

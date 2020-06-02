@@ -101,12 +101,15 @@ if __name__ == '__main__':
         onBehalfOfContentOwnerChannel='')
 
     for listID in playLists['items']:
-        if (re.search('MUSIC', listID['snippet']['title'])):
-            print('Title:' + listID['snippet']['title'] + ', ID: ' + listID['id'])
-            playList = userPlaylists.playlist_items_list_by_playlist_id(service,
-                part='snippet',
-                maxResults=25,
-                playlistId=listID['id'])
-            for item in playList['items']:
-                print('Title:' + item['snippet']['title'] + '\nvid:' + item['snippet']['resourceId']['videoId'])
-                userPlaylists.getMusic(item['snippet']['resourceId']['videoId'], item['snippet']['title'])
+        try:
+            if (re.search('MUSIC', listID['snippet']['title'])):
+                print('Title:' + listID['snippet']['title'] + ', ID: ' + listID['id'])
+                playList = userPlaylists.playlist_items_list_by_playlist_id(service,
+                    part='snippet',
+                    maxResults=25,
+                    playlistId=listID['id'])
+                for item in playList['items']:
+                    print('Title:' + item['snippet']['title'] + '\nvid:' + item['snippet']['resourceId']['videoId'])
+                    userPlaylists.getMusic(item['snippet']['resourceId']['videoId'], item['snippet']['title'])
+        except Exception as e:
+            print(str(e))

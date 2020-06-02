@@ -61,3 +61,5 @@ TODO:
 進行各種操作的時候要寫log  
 GUI視窗界面  
 根據音樂類型區分資料夾  
+
+sudo apt-get install ffmpeg

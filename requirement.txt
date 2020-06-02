@@ -11,3 +11,6 @@ pyflakes == 2.0.0
 pycodestyle == 2.4.0 
 appdirs == 1.4.3 
 pyserial == 3.4
+pathvalidate ==  2.2.0
+google-oauth2-tool >=0.03
+google-auth-oauthlib >=0.4.1

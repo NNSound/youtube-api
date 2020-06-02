@@ -5,9 +5,9 @@ from mypackage.model import AllMusic
 
 kk = kkbox()
 
-kk.daily()
+# kk.daily()
 kk.weekly()#297華語
-kk.weekly(cid=390)#西洋
+# kk.weekly(cid=390)#西洋
 # kk.weekly(cid=324)
 # kk.weekly(cid=352)
 
@@ -25,7 +25,8 @@ for row in mylist:
         model.song = row[1]
         model.video_id = vid
         model.is_download = 0
-        Base.download_v3(vid,row[0],row[1])
+        fileName = "%s - %s"%(row[0],row[1])
+        Base.download_v3(vid, fileName)
         model.is_download = 1
         model.insert()
         print("[INSERT] %s-%s"%(row[0], row[1]))
