@@ -58,7 +58,9 @@ def search_hot(key,q):
     dic = {'part':'snippet','key':key,'type':'video','q':q,'maxResults':1}
     r = requests.get(url,params=dic)
     json_data = json.loads(r.text)
-    # print(json_data)
+    if ('error' in json_data):
+        raise Exception("youtube-search-error")
+
     videoId = json_data['items'][0]['id']['videoId']
     return videoId
 
