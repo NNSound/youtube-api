@@ -59,6 +59,7 @@ def search_hot(key,q):
     r = requests.get(url,params=dic)
     json_data = json.loads(r.text)
     if ('error' in json_data):
+        print(json_data)
         raise Exception("youtube-search-error")
 
     videoId = json_data['items'][0]['id']['videoId']
@@ -94,6 +95,8 @@ def download_v3(videoID, fileName):
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'flac',
             'preferredquality': '192',
+        },{
+            'key': 'FFmpegMetadata',
         }]
     }
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:

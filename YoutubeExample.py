@@ -30,6 +30,8 @@ ydl_opts = {
         'key': 'FFmpegExtractAudio',
         'preferredcodec': 'flac',
         'preferredquality': '192',
+    },{
+        'key': 'FFmpegMetadata'
     }]
 }
 with youtube_dl.YoutubeDL(ydl_opts) as ydl:
