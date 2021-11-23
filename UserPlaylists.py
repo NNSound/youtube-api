@@ -2,6 +2,7 @@ import os
 
 import google.oauth2.credentials
 
+import google_auth_oauthlib.flow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -35,14 +36,14 @@ class UserPlaylists(object):
             flow = client.flow_from_clientsecrets(self.CLIENT_SECRETS_FILE, self.SCOPES)
             credentials = tools.run_flow(flow, store)
 
-        # flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES)
+        # flow = InstalledAppFlow.from_client_secrets_file(self.CLIENT_SECRETS_FILE, self.SCOPES)
         # credentials = flow.run_console()
         return build(self.API_SERVICE_NAME, self.API_VERSION, credentials = credentials)
 
-    def playlists_list_mine(self,client, **kwargs):
+    def playlists_list_mine(self, client, **kwargs):
         # See full sample for function
         kwargs = self.remove_empty_kwargs(**kwargs)
-
+        
         response = client.playlists().list(
             **kwargs
         ).execute()
@@ -94,7 +95,7 @@ if __name__ == '__main__':
     service = userPlaylists.get_authenticated_service()
 
     playLists =  userPlaylists.playlists_list_mine(service,
-        part='snippet',
+        part='snippet,localizations',
         mine=True,
         maxResults=50,
         onBehalfOfContentOwner='',

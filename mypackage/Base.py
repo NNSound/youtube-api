@@ -84,6 +84,7 @@ def download_v2(videoID,artist,name):
 
 def download_v3(videoID, fileName):
     # fileName = strclear_v2(fileName)
+    fileName.replace("/", "")
     url = 'https://www.youtube.com/watch?v='+str(videoID)
     current_time = datetime.datetime.now()
     current_time = current_time.strftime("%Y-%m-%d")
